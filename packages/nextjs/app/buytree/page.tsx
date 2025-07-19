@@ -15,11 +15,15 @@ import {
   Wallet,
 } from "lucide-react";
 import type { NextPage } from "next";
+import toast from "react-hot-toast";
+import { json } from "stream/consumers";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 // Contract ABI for the functions we need
+
 const contractABI = [
   {
     inputs: [],
@@ -73,6 +77,16 @@ const BuyTree: NextPage = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [trees, setTrees] = useState<TreeData[]>([]);
 
+  const { writeContractAsync: mintTree } = useScaffoldWriteContract({
+    contractName: "FruitTreeNFT",
+  });
+  async function HandleMintTree() {
+    await mintTree({
+      functionName: "mintTree",
+      args: [selectedTree?.treeType, "https://example.com/token-uri.json"],
+      value: selectedTree?.currentPrice,
+    });
+  }
   // Read contract data
   const {
     data: treeTypesData,
@@ -190,17 +204,19 @@ const BuyTree: NextPage = () => {
   const confirmPurchase = async () => {
     if (selectedTree && isConnected) {
       try {
-        await writeContract({
-          address: CONTRACT_ADDRESS,
-          abi: contractABI,
+        await mintTree({
           functionName: "mintTree",
           args: [selectedTree.treeType, `https://metadata.example.com/${selectedTree.treeType}.json`],
           value: selectedTree.currentPrice,
         });
         setShowPurchaseModal(false);
         setSelectedTree(null);
-      } catch (error) {
-        console.error("Purchase failed:", error);
+        toast.success("Tree NFT purchased successfully!");
+      } catch (error: any) {
+        console.error("Mint error:", error);
+
+        const message = error?.cause?.reason || "Transaction failed";
+        toast.error(message);
       }
     }
   };
