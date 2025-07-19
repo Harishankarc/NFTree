@@ -9738,6 +9738,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "gsap@npm:3.13.0"
+  checksum: 40884726718b5bed8cdd6faa621b3eaec64541b6fc163a0af810d3626d750e5d010f7300f4b106327d4474623a9fd5f915a48081d7744eec38c57a1fce20fb62
+  languageName: node
+  linkType: hard
+
 "h3@npm:^1.15.3":
   version: 1.15.3
   resolution: "h3@npm:1.15.3"
@@ -14805,6 +14812,7 @@ __metadata:
   resolution: "se-2@workspace:."
   dependencies:
     autoprefixer: ^10.4.21
+    gsap: ^3.13.0
     husky: ~9.1.6
     lint-staged: ~13.2.2
     lucide-react: ^0.525.0

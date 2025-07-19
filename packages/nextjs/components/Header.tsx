@@ -37,7 +37,7 @@ export const HeaderMenuLinks = () => {
               href={href}
               passHref
               className={`${
-                isActive ? "underline underline-offset-4 font-bold text-black" : ""
+                isActive ? "" : ""
               }  py-1.5 px-3 text-sm rounded-sm gap-2 grid grid-flow-col text-black `}
             >
               {icon}
@@ -63,11 +63,13 @@ export const Header = () => {
   });
 
   return (
-    <div className=" lg:static top-0 navbar min-h-0 shrink-0 justify-between z-20 px-0 sm:px-2 bg-transparent text-black">
-      <div className=" fixed navbar-start w-full  flex items-center justify-center ">
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2  text-black">
+    <div className="py-5 lg:static top-0 navbar min-h-0 shrink-0 justify-between z-20 px-0 sm:px-2 bg-transparent border-black text-black">
+      <div className=" fixed navbar-start w-full  flex items-center justify-center border-black ">
+        <div className="border-1 border-black rounded-3xl backdrop-blur-[2px]">
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2  text-black no-underline">
           <HeaderMenuLinks />
         </ul>
+      </div>
       </div>
       <div className="navbar-end  grow mr-4">
         <RainbowKitCustomConnectButton />

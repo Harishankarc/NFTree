@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Leaf, TreePine, Coins, TrendingUp, Shield, Users, Wallet, CheckCircle } from 'lucide-react';
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
+import {gsap} from "gsap";
 
 const Landing: NextPage = () => {
   const { address: connectedAddress, isConnected } = useAccount();
@@ -62,7 +63,7 @@ const Landing: NextPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
@@ -101,7 +102,7 @@ const Landing: NextPage = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button
-              className={`px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ${!isMounted
+              className={`px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105  ${!isMounted
                   ? 'bg-gray-400 cursor-not-allowed text-white'
                   : isConnected
                     ? 'bg-green-600 hover:bg-green-700 text-white'
@@ -122,25 +123,12 @@ const Landing: NextPage = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-              <div className="text-3xl font-bold text-green-800 mb-2">1,000+</div>
-              <div className="text-green-600">Trees Planted</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-              <div className="text-3xl font-bold text-green-800 mb-2">15-30%</div>
-              <div className="text-green-600">Annual Returns</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-              <div className="text-3xl font-bold text-green-800 mb-2">500+</div>
-              <div className="text-green-600">Happy Investors</div>
-            </div>
-          </div>
+
         </div>
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-16 px-4 bg-white/50">
+      <section id="how-it-works" className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center text-green-800 mb-12">How TreeVest Works</h2>
 
@@ -185,20 +173,20 @@ const Landing: NextPage = () => {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Why Choose TreeVest?</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
+          <div className="grid  grid-rows-3 md:grid-cols-3 gap-8 w-[60vw] md:w-auto mx-[25vw]">
+            <div className="bg-white rounded-2xl p-8 ">
               <Shield className="h-12 w-12 text-green-600 mb-4" />
               <h3 className="text-2xl font-semibold text-green-800 mb-3">Secure Blockchain</h3>
               <p className="text-green-600">Built on BNB Smart Chain for maximum security and transparency</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <div className="bg-white rounded-2xl p-8 ">
               <TrendingUp className="h-12 w-12 text-green-600 mb-4" />
               <h3 className="text-2xl font-semibold text-green-800 mb-3">Growing Returns</h3>
               <p className="text-green-600">Earn annual yields plus benefit from increasing NFT value</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <div className="bg-white rounded-2xl p-8 ">
               <Users className="h-12 w-12 text-green-600 mb-4" />
               <h3 className="text-2xl font-semibold text-green-800 mb-3">Community Driven</h3>
               <p className="text-green-600">Join a growing community of eco-conscious investors</p>
