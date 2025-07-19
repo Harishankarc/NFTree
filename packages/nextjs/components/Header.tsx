@@ -36,6 +36,7 @@ export const menuLinks: HeaderMenuLink[] = [
 export const HeaderMenuLinks = ({ mobile = false, onLinkClick }: { mobile?: boolean; onLinkClick?: () => void }) => {
   const pathname = usePathname();
 
+
   return (
     <>
       {menuLinks.map(({ label, href, icon }) => {
@@ -46,12 +47,12 @@ export const HeaderMenuLinks = ({ mobile = false, onLinkClick }: { mobile?: bool
               href={href}
               onClick={onLinkClick}
               className={`
-                relative px-10 py-3 font-medium text-base transition-all duration-300 group hover:underline hover:underline-offset-6
-                ${mobile
-                  ? 'block text-slate-700 hov er:text-emerald-600 hover:bg-emerald-50 rounded-lg'
-                  : `text-slate-700 hover:text-emerald-600 ${isActive ? 'text-emerald-600' : ''}`
+    relative px-10 py-3 font-medium text-base transition-all duration-300 group hover:underline hover:underline-offset-6
+    ${mobile
+                  ? `block rounded-lg ${isActive ? 'text-emerald-600 font-semibold bg-emerald-50' : 'text-slate-700 hover:text-emerald-600 hover:bg-emerald-50'}`
+                  : `${isActive ? 'text-emerald-600 font-semibold underline underline-offset-6' : 'text-slate-700 hover:text-emerald-600'}`
                 }
-              `}
+  `}
             >
               <div className="flex items-center gap-2">
                 {icon}
