@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { useReadContract } from "wagmi";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 const treeMetadata = {
   0: { emoji: "🥭", description: "Sweet mango trees with high returns and delicious fruit yields.", rarity: "Rare" },
@@ -12,7 +13,7 @@ const treeMetadata = {
   4: { emoji: "🍈", description: "Large jackfruit trees with substantial yields and long-term growth potential.", rarity: "Epic" },
 };
 
-const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3" as const;
+
 const contractABI = [
   {
     inputs: [{ internalType: "address", name: "_owner", type: "address" }],
@@ -34,6 +35,11 @@ const ProfilePage = () => {
   const { address: connectedAddress, isConnected } = useAccount();
   const [treeNames, setTreeNames] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName: "FruitTreeNFT",
+  });
+  const CONTRACT_ADDRESS = deployedContractData?.address;
 
   const { data: ownedTrees } = useReadContract({
     address: CONTRACT_ADDRESS,
@@ -265,16 +271,16 @@ const ProfilePage = () => {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        
+
         @keyframes fade-in-up {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .animate-fade-in {
           animation: fade-in 0.8s ease-out forwards;
         }
-        
+
         .animate-fade-in-up {
           animation: fade-in-up 0.6s ease-out forwards;
           opacity: 0;
