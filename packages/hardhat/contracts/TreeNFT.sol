@@ -213,24 +213,10 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         emit ProfitWithdrawn(msg.sender, amount);
     }
 
-    function getTreesByOwner(address _owner) external view returns (uint256[] memory) {
-        uint256[] memory result = new uint256[](ownerTreeCount[_owner]);
-        uint256 counter = 0;
-
-        for (uint256 i = 1; i < nextTokenId; i++) {
-            if (ownerOf(i) == _owner) {
-                result[counter] = i;
-                counter++;
-            }
-        }
-
-        return result;
-    }
-
     function getTreeDetails(
         uint256 tokenId
     )
-        external
+        public
         view
         returns (
             string memory treeName,
@@ -253,6 +239,52 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         uint256 cycleDuration = treeInfo.harvestCycleMonths * SECONDS_PER_MONTH;
         uint256 timeSinceLastHarvest = block.timestamp - tree.lastHarvestTime;
         nextHarvestTime = tree.lastHarvestTime + cycleDuration - (timeSinceLastHarvest % cycleDuration);
+    }
+
+    function getTreeDetailsByOwner(
+        address _owner
+    )
+        public
+        view
+        returns (
+            uint256[] memory tokenIds,
+            string[] memory treeNames,
+            uint256[] memory currentValues,
+            uint256[] memory availableHarvestsArray,
+            uint256[] memory totalHarvestsArray,
+            uint256[] memory nextHarvestTimes
+        )
+    {
+        uint256 count = ownerTreeCount[_owner];
+        tokenIds = new uint256[](count);
+        treeNames = new string[](count);
+        currentValues = new uint256[](count);
+        availableHarvestsArray = new uint256[](count);
+        totalHarvestsArray = new uint256[](count);
+        nextHarvestTimes = new uint256[](count);
+
+        uint256 index = 0;
+        for (uint256 i = 1; i < nextTokenId; i++) {
+            if (ownerOf(i) == _owner) {
+                tokenIds[index] = i;
+
+                (
+                    string memory treeName,
+                    uint256 currentValue,
+                    uint256 availableHarvests,
+                    uint256 totalHarvests,
+                    uint256 nextHarvestTime
+                ) = getTreeDetails(i);
+
+                treeNames[index] = treeName;
+                currentValues[index] = currentValue;
+                availableHarvestsArray[index] = availableHarvests;
+                totalHarvestsArray[index] = totalHarvests;
+                nextHarvestTimes[index] = nextHarvestTime;
+
+                index++;
+            }
+        }
     }
 
     function getTreeTypeInfo(TreeType _treeType) external view returns (TreeInfo memory) {
