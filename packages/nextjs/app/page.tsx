@@ -2,194 +2,287 @@
 
 import Link from "next/link";
 import type { NextPage } from "next";
-import { useState, useEffect } from 'react';
-import { Leaf, TreePine, Coins, TrendingUp, Shield, Users, Wallet, CheckCircle } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Leaf, TreePine, Coins, TrendingUp, Shield, Users, Wallet, CheckCircle, ArrowRight, Star, Award, Globe, ChevronDown } from 'lucide-react';
 import { useAccount } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
-import {gsap} from "gsap";
+// import { Address } from "/components/scaffold-eth";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger);
+
+// Types and Interfaces
+interface TreeType {
+  id: string;
+  name: string;
+  emoji: string;
+  initialCost: string;
+  yieldYears: string;
+  annualReturn: string;
+  description: string;
+  featured?: boolean;
+}
+
+interface StepInfo {
+  icon: typeof Coins;
+  title: string;
+  description: string;
+  step: number;
+}
+
+interface BenefitInfo {
+  icon: typeof Shield;
+  title: string;
+  description: string;
+  stat?: string;
+}
+
+// Constants
+const ANIMATION_CONFIG = {
+  HERO_DELAY: 0.5,
+  HERO_DURATION: 1,
+  HERO_STAGGER: 0.2,
+  SCROLL_TRIGGER_START: "top 80%",
+  SCROLL_TRIGGER_END: "bottom 20%",
+  CARD_HOVER_SCALE: 1.02,
+  BUTTON_HOVER_SCALE: 1.05
+} as const;
+
+
+const HOW_IT_WORKS_STEPS: StepInfo[] = [
+  {
+    icon: Wallet,
+    title: "Connect & Fund",
+    description: "Connect your wallet and choose your investment amount from our curated tree portfolio",
+    step: 1
+  },
+  {
+    icon: TreePine,
+    title: "Watch Growth",
+    description: "Monitor your tree's development through our real-time dashboard with NFT value tracking",
+    step: 2
+  },
+  {
+    icon: TrendingUp,
+    title: "Earn Yields",
+    description: "Receive automated annual returns directly to your wallet when trees begin producing",
+    step: 3
+  },
+  {
+    icon: Coins,
+    title: "Reinvest or Withdraw",
+    description: "Scale your portfolio by reinvesting returns or withdraw profits at any time",
+    step: 4
+  }
+];
+
+const BENEFITS: BenefitInfo[] = [
+  {
+    icon: Shield,
+    title: "Bank-Grade Security",
+    description: "Multi-signature smart contracts audited by leading security firms",
+    stat: "99.9% Uptime"
+  },
+  {
+    icon: Globe,
+    title: "Global Accessibility",
+    description: "Invest from anywhere in the world with 24/7 blockchain availability",
+    stat: "50+ Countries"
+  },
+  {
+    icon: Award,
+    title: "Proven Returns",
+    description: "Historical performance showing consistent yields above traditional investments",
+    stat: "22% Avg Return"
+  }
+];
+
+// Custom Hooks
+const useAnimations = () => {
+  useEffect(() => {
+    // Hero animations with stagger
+    const heroElements = [".hero-badge", ".hero-title", ".hero-description", ".hero-buttons", ".hero-stats"];
+    
+    gsap.fromTo(heroElements, 
+      { y: 60, opacity: 0 },
+      { 
+        y: 0, 
+        opacity: 1, 
+        duration: ANIMATION_CONFIG.HERO_DURATION,
+        stagger: ANIMATION_CONFIG.HERO_STAGGER,
+        delay: ANIMATION_CONFIG.HERO_DELAY,
+        ease: "power3.out"
+      }
+    );
+
+    // Scroll animations for sections
+    gsap.utils.toArray([".animate-on-scroll"]).forEach((element: any) => {
+      gsap.fromTo(element,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: element,
+            start: ANIMATION_CONFIG.SCROLL_TRIGGER_START,
+            end: ANIMATION_CONFIG.SCROLL_TRIGGER_END,
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
+    // Card hover animations
+    gsap.utils.toArray([".hover-card"]).forEach((card: any) => {
+      const tl = gsap.timeline({ paused: true });
+      tl.to(card, { scale: ANIMATION_CONFIG.CARD_HOVER_SCALE, duration: 0.3, ease: "power2.out" });
+      
+      card.addEventListener('mouseenter', () => tl.play());
+      card.addEventListener('mouseleave', () => tl.reverse());
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+};
+
+const useMountedState = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
+  return isMounted;
+};
+
+// Component
 const Landing: NextPage = () => {
   const { address: connectedAddress, isConnected } = useAccount();
   const [selectedTree, setSelectedTree] = useState<TreeType | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useMountedState();
 
-  // Fix hydration mismatch
-  useEffect(() => {
-    setIsMounted(true);
+  useAnimations();
+
+  const handleStartInvesting = useCallback(() => {
+    if (!isConnected || !isMounted) return;
+    console.log('Starting investment flow');
+  }, [isConnected, isMounted]);
+
+  const handleLearnMore = useCallback(() => {
+    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  type TreeType = {
-    name: string;
-    emoji: string;
-    initialCost: string;
-    yieldYears: string;
-    annualReturn: string;
-    description: string;
-  };
-
-  const treeTypes = [
-    {
-      name: 'Coconut Tree',
-      emoji: '🥥',
-      initialCost: '0.5 TBNB',
-      yieldYears: '3-5 years',
-      annualReturn: '15-20%',
-      description: 'Tropical coconut trees with steady yields'
-    },
-    {
-      name: 'Mango Tree',
-      emoji: '🥭',
-      initialCost: '0.8 TBNB',
-      yieldYears: '2-4 years',
-      annualReturn: '18-25%',
-      description: 'Sweet mango trees with high returns'
-    },
-    {
-      name: 'Guava Tree',
-      emoji: '🍈',
-      initialCost: '0.3 TBNB',
-      yieldYears: '2-3 years',
-      annualReturn: '12-18%',
-      description: 'Fast-growing guava with quick yields'
-    },
-    {
-      name: 'Apple Tree',
-      emoji: '🍎',
-      initialCost: '1.2 TBNB',
-      yieldYears: '4-6 years',
-      annualReturn: '20-30%',
-      description: 'Premium apple trees with excellent returns'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
-      {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Wallet Connection Status */}
-          <div className="mb-6">
-            {!isMounted ? (
-              // Show neutral state during hydration
-              <div className="inline-flex items-center bg-gray-50 border border-gray-200 rounded-full px-6 py-3 shadow-sm">
-                <div className="h-5 w-5 bg-gray-300 rounded-full mr-2 animate-pulse"></div>
-                <span className="text-gray-500 font-medium">Loading wallet status...</span>
-              </div>
-            ) : isConnected && connectedAddress ? (
-              <div className="inline-flex items-center bg-green-100 border border-green-200 rounded-full px-6 py-3 shadow-sm">
-                <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                <span className="text-green-700 font-medium mr-3">Wallet Connected:</span>
-                <Address address={connectedAddress} />
-              </div>
-            ) : (
-              <div className="inline-flex items-center bg-yellow-50 border border-yellow-200 rounded-full px-6 py-3 shadow-sm">
-                <Wallet className="h-5 w-5 text-yellow-600 mr-2" />
-                <span className="text-yellow-700 font-medium">Connect your wallet to start investing</span>
-              </div>
-            )}
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      {/* Navigation */}
+      
 
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-green-800 mb-6 leading-tight">
-              Grow Your Wealth,<br />
-              <span className="text-green-600">Plant Your Future</span>
+      {/* Hero Section */}
+      <section className="pt-24 pb-12 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="hero-badge opacity-0 inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-sm font-medium mb-6">
+              <Star className="w-4 h-4 fill-current" />
+              Trusted by 999+ eco-investors worldwide
+            </div>
+
+            {/* Title */}
+            <h1 className="hero-title opacity-0 text-5xl md:text-7xl font-bold text-slate-800 mb-6 leading-tight">
+              Sustainable Wealth
+              <br />
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Through Nature
+              </span>
             </h1>
-            <p className="text-xl text-green-700 max-w-3xl mx-auto leading-relaxed">
-              Invest in virtual trees on the BNB blockchain and watch them grow into profitable assets.
-              Earn yearly returns when your trees yield, and benefit from increasing NFT values over time.
+
+            {/* Description */}
+            <p className="hero-description opacity-0 text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
+              Invest in blockchain-verified virtual trees and earn consistent returns while contributing 
+              to environmental sustainability. Join the future of green finance.
+            </p>
+
+            {/* Buttons */}
+            <div className="hero-buttons opacity-0 flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <button
+                className={`group px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
+                  !isMounted || !isConnected
+                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                }`}
+                disabled={!isMounted || !isConnected}
+                onClick={handleStartInvesting}
+              >
+                {!isMounted ? 'Loading...' : isConnected ? 'Start Investing' : 'Connect Wallet First'}
+                {isMounted && isConnected && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+              </button>
+              
+              <button
+                className="px-8 py-4 border border-slate-300 hover:border-slate-400 text-slate-700 hover:text-slate-800 rounded-xl text-lg font-semibold transition-all duration-300 hover:bg-slate-50"
+                onClick={handleLearnMore}
+              >
+                Learn More
+                <ChevronDown className="w-5 h-5 inline-block ml-2" />
+              </button>
+            </div>
+
+            {/* Stats */}
+            <div className="hero-stats opacity-0 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+              {[
+                { value: '999 tBNB+', label: 'Total Invested' },
+                { value: '69+', label: 'Trees Planted' },
+                { value: '22%', label: 'Avg. Annual Return' },
+                { value: '98.5%', label: 'Success Rate' }
+              ].map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-slate-800">{stat.value}</div>
+                  <div className="text-sm text-slate-600">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tree Portfolio Preview */}
+      
+
+      {/* How It Works */}
+      <section id="how-it-works" className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="animate-on-scroll text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+              Simple, Transparent Process
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Get started with sustainable investing in just four easy steps
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button
-              className={`px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105  ${!isMounted
-                  ? 'bg-gray-400 cursor-not-allowed text-white'
-                  : isConnected
-                    ? 'bg-green-600 hover:bg-green-700 text-white'
-                    : 'bg-gray-400 cursor-not-allowed text-white'
-                }`}
-              disabled={!isMounted || !isConnected}
-            >
-              {!isMounted
-                ? 'Loading... 🔄'
-                : isConnected
-                  ? 'Start Growing 🌱'
-                  : 'Connect Wallet First 🔐'
-              }
-            </button>
-            <button className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
-              Learn More
-            </button>
-          </div>
-
-          {/* Stats */}
-
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">How TreeVest Works</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Coins className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-green-800 mb-3">1. Buy Your Tree</h3>
-              <p className="text-green-600">Choose from various tree types and pay the initial investment in TBNB</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TreePine className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-green-800 mb-3">2. Watch It Grow</h3>
-              <p className="text-green-600">Your tree grows in value like an NFT during the initial years</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-green-800 mb-3">3. Earn Returns</h3>
-              <p className="text-green-600">Start receiving annual yields when your tree begins producing</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Leaf className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-green-800 mb-3">4. Sell or Hold</h3>
-              <p className="text-green-600">Sell for 60% of tree value or keep earning annual returns</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section id="benefits" className="py-16 px-4 bg-green-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center text-green-800 mb-12">Why Choose TreeVest?</h2>
-
-          <div className="grid  grid-rows-3 md:grid-cols-3 gap-8 w-[60vw] md:w-auto mx-[25vw]">
-            <div className="bg-white rounded-2xl p-8 ">
-              <Shield className="h-12 w-12 text-green-600 mb-4" />
-              <h3 className="text-2xl font-semibold text-green-800 mb-3">Secure Blockchain</h3>
-              <p className="text-green-600">Built on BNB Smart Chain for maximum security and transparency</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 ">
-              <TrendingUp className="h-12 w-12 text-green-600 mb-4" />
-              <h3 className="text-2xl font-semibold text-green-800 mb-3">Growing Returns</h3>
-              <p className="text-green-600">Earn annual yields plus benefit from increasing NFT value</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 ">
-              <Users className="h-12 w-12 text-green-600 mb-4" />
-              <h3 className="text-2xl font-semibold text-green-800 mb-3">Community Driven</h3>
-              <p className="text-green-600">Join a growing community of eco-conscious investors</p>
+          <div className="relative">
+            {/* Connection line */}
+            
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {HOW_IT_WORKS_STEPS.map((step, index) => {
+                const IconComponent = step.icon;
+                return (
+                  <div key={index} className="animate-on-scroll text-center relative">
+                    <div className="relative mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <IconComponent className="w-8 h-8 text-white" />
+                      </div>
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-slate-800 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        {step.step}
+                      </div>
+                    </div>
+                    
+                    <h3 className="text-xl font-semibold text-slate-800 mb-3">{step.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{step.description}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ const contractABI = [
 ];
 
 // Replace with your actual contract address
-const CONTRACT_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9" as const;
+const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3" as const;
 
 interface TreeData {
   treeType: number;
@@ -248,14 +248,13 @@ const BuyTree: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
+    <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-20">
         {/* Page Title */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-green-800 mb-4">Buy Your Fruit Trees</h1>
-          <p className="text-xl text-green-600 max-w-2xl mx-auto">
-            Choose from our collection of fruit tree NFTs and start earning passive income
+          <p className="text-xl text-green-600 max-w-2xl mx-auto">Choose from our collection of fruit tree NFTs and start earning passive income
           </p>
         </div>
 
