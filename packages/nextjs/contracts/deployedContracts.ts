@@ -534,6 +534,50 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "_owner",
+              type: "address",
+            },
+          ],
+          name: "getTreeDetailsByOwner",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "tokenIds",
+              type: "uint256[]",
+            },
+            {
+              internalType: "string[]",
+              name: "treeNames",
+              type: "string[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "currentValues",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "availableHarvestsArray",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "totalHarvestsArray",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "nextHarvestTimes",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "enum FruitTreeNFT.TreeType",
               name: "_treeType",
               type: "uint8",
@@ -591,25 +635,6 @@ const deployedContracts = {
               internalType: "uint256",
               name: "",
               type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_owner",
-              type: "address",
-            },
-          ],
-          name: "getTreesByOwner",
-          outputs: [
-            {
-              internalType: "uint256[]",
-              name: "",
-              type: "uint256[]",
             },
           ],
           stateMutability: "view",

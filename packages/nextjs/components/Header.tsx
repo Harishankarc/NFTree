@@ -37,8 +37,8 @@ export const HeaderMenuLinks = () => {
               href={href}
               passHref
               className={`${
-                isActive ? "underline underline-offset-4 font-bold" : ""
-              }  active:!text-neutral py-1.5 px-3 text-sm rounded-sm gap-2 grid grid-flow-col`}
+                isActive ? "underline underline-offset-4 font-bold text-black" : ""
+              }  py-1.5 px-3 text-sm rounded-sm gap-2 grid grid-flow-col text-black `}
             >
               {icon}
               <span>{label}</span>
@@ -63,13 +63,13 @@ export const Header = () => {
   });
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
-      <div className="navbar-start w-auto lg:w-1/2">
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+    <div className=" lg:static top-0 navbar min-h-0 shrink-0 justify-between z-20 px-0 sm:px-2 bg-transparent text-black">
+      <div className=" fixed navbar-start w-full  flex items-center justify-center ">
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2  text-black">
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end grow mr-4">
+      <div className="navbar-end  grow mr-4">
         <RainbowKitCustomConnectButton />
         {isLocalNetwork && <FaucetButton />}
       </div>
