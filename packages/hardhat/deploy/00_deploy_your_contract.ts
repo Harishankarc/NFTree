@@ -4,11 +4,11 @@ const deployTreeNFT: DeployFunction = async function ({ deployments, getNamedAcc
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  await deploy("TreeNFT", {
+  await deploy("FruitTreeNFT", {
     from: deployer,
     log: true,
   });
 };
 
 export default deployTreeNFT;
-deployTreeNFT.tags = ["TreeNFT"];
+deployTreeNFT.tags = ["FruitTreeNFT"];

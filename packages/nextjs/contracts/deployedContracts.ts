@@ -6,8 +6,8 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    TreeNFT: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    FruitTreeNFT: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [],
@@ -140,6 +140,11 @@ const deployedContracts = {
           type: "error",
         },
         {
+          inputs: [],
+          name: "ReentrancyGuardReentrantCall",
+          type: "error",
+        },
+        {
           anonymous: false,
           inputs: [
             {
@@ -212,6 +217,31 @@ const deployedContracts = {
           anonymous: false,
           inputs: [
             {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "profit",
+              type: "uint256",
+            },
+          ],
+          name: "HarvestClaimed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
               indexed: false,
               internalType: "uint256",
               name: "_tokenId",
@@ -246,6 +276,25 @@ const deployedContracts = {
             {
               indexed: true,
               internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "ProfitWithdrawn",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
               name: "from",
               type: "address",
             },
@@ -264,6 +313,50 @@ const deployedContracts = {
           ],
           name: "Transfer",
           type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "treeType",
+              type: "uint8",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "price",
+              type: "uint256",
+            },
+          ],
+          name: "TreeMinted",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "SECONDS_PER_MONTH",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
         {
           inputs: [
@@ -303,16 +396,43 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "basePrice",
-          outputs: [
+          inputs: [
             {
               internalType: "uint256",
-              name: "",
+              name: "tokenId",
               type: "uint256",
             },
           ],
-          stateMutability: "view",
+          name: "claimHarvest",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256[]",
+              name: "tokenIds",
+              type: "uint256[]",
+            },
+          ],
+          name: "claimMultipleHarvests",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "emergencyWithdraw",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "fundContract",
+          outputs: [],
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -342,12 +462,154 @@ const deployedContracts = {
               type: "uint256",
             },
           ],
+          name: "getAvailableHarvests",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "_treeType",
+              type: "uint8",
+            },
+          ],
+          name: "getCurrentTreePrice",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
+          name: "getTreeDetails",
+          outputs: [
+            {
+              internalType: "string",
+              name: "treeName",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "currentValue",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "availableHarvests",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalHarvests",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "nextHarvestTime",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "_treeType",
+              type: "uint8",
+            },
+          ],
+          name: "getTreeTypeInfo",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "name",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "basePrice",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "harvestCycleMonths",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "profitRatePerCycle",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "yearlyAppreciation",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct FruitTreeNFT.TreeInfo",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+          ],
           name: "getTreeValue",
           outputs: [
             {
               internalType: "uint256",
               name: "",
               type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_owner",
+              type: "address",
+            },
+          ],
+          name: "getTreesByOwner",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
             },
           ],
           stateMutability: "view",
@@ -379,6 +641,11 @@ const deployedContracts = {
         },
         {
           inputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "_treeType",
+              type: "uint8",
+            },
             {
               internalType: "string",
               name: "tokenURI",
@@ -443,6 +710,44 @@ const deployedContracts = {
               internalType: "address",
               name: "",
               type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "ownerTreeCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "profitBalances",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -614,6 +919,45 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "",
+              type: "uint8",
+            },
+          ],
+          name: "treeTypeInfo",
+          outputs: [
+            {
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "basePrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "harvestCycleMonths",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "profitRatePerCycle",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "yearlyAppreciation",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "uint256",
               name: "",
               type: "uint256",
@@ -621,6 +965,11 @@ const deployedContracts = {
           ],
           name: "trees",
           outputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "treeType",
+              type: "uint8",
+            },
             {
               internalType: "uint256",
               name: "mintTime",
@@ -631,13 +980,73 @@ const deployedContracts = {
               name: "initialPrice",
               type: "uint256",
             },
+            {
+              internalType: "uint256",
+              name: "lastHarvestTime",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "totalHarvests",
+              type: "uint256",
+            },
           ],
           stateMutability: "view",
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType",
+              name: "_treeType",
+              type: "uint8",
+            },
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "_basePrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_harvestCycleMonths",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_profitRatePerCycle",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_yearlyAppreciation",
+              type: "uint256",
+            },
+          ],
+          name: "updateTreeTypeInfo",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
           inputs: [],
-          name: "withdraw",
+          name: "withdrawContractFunds",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "withdrawProfits",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -647,35 +1056,8 @@ const deployedContracts = {
           type: "receive",
         },
       ],
-      inheritedFunctions: {
-        approve:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        balanceOf:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        getApproved:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        isApprovedForAll:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        name: "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        ownerOf:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        safeTransferFrom:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        setApprovalForAll:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        supportsInterface:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        symbol:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        tokenURI:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        transferFrom:
-          "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        owner: "@openzeppelin/contracts/access/Ownable.sol",
-        renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
-        transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
-      },
-      deployedOnBlock: 2,
+      inheritedFunctions: {},
+      deployedOnBlock: 1,
     },
   },
 } as const;
