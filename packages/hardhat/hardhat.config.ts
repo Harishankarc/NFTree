@@ -37,7 +37,7 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  defaultNetwork: "localhost",
+  defaultNetwork: "virtualbnb",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -52,6 +52,11 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
+    },
+    virtualbnb: {
+      url: "https://virtual.binance-rialto.rpc.tenderly.co/996f58c5-1216-4c97-be7c-5d9612fd53a9", // your Tenderly RPC URL
+      chainId: 97,  // or check your Tenderly fork Chain ID
+      accounts: ['6eb7ed8f87b3f8e52e672ec3a85bd743da047fd87ef7b462337c2737950aac25'],  // Use a funded account's private key
     },
     mainnet: {
       url: "https://mainnet.rpc.buidlguidl.com",

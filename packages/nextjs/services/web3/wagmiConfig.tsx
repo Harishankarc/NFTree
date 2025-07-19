@@ -4,6 +4,7 @@ import { hardhat, mainnet } from "viem/chains";
 import { createConfig } from "wagmi";
 import scaffoldConfig, { DEFAULT_ALCHEMY_API_KEY, ScaffoldConfig } from "~~/scaffold.config";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
+import { virtualBNB } from '~~/utils/customChains';
 
 const { targetNetworks } = scaffoldConfig;
 
