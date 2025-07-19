@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     FruitTreeNFT: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [],
@@ -433,6 +433,49 @@ const deployedContracts = {
           name: "fundContract",
           outputs: [],
           stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getAllTreeTypes",
+          outputs: [
+            {
+              internalType: "uint8[]",
+              name: "treeTypes",
+              type: "uint8[]",
+            },
+            {
+              internalType: "string[]",
+              name: "names",
+              type: "string[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "basePrices",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "currentPrices",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "harvestCycleMonths",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "profitRatesPerCycle",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "yearlyAppreciations",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -1082,7 +1125,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 1,
+      deployedOnBlock: 2,
     },
   },
 } as const;

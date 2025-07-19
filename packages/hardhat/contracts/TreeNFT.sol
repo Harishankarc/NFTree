@@ -138,9 +138,9 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         TreeInfo memory treeInfo = treeTypeInfo[tree.treeType];
 
         uint256 yearsElapsed = (block.timestamp - tree.mintTime) / (365 * 24 * 60 * 60);
-        uint256 appreciationFactor = (100 + treeInfo.yearlyAppreciation * yearsElapsed) / 100;
+        uint256 appreciationFactor = 100 + treeInfo.yearlyAppreciation * yearsElapsed;
 
-        return (tree.initialPrice * appreciationFactor);
+        return (tree.initialPrice * appreciationFactor) / 100;
     }
 
     function getAvailableHarvests(uint256 tokenId) public view returns (uint256) {
@@ -238,7 +238,8 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
 
         uint256 cycleDuration = treeInfo.harvestCycleMonths * SECONDS_PER_MONTH;
         uint256 timeSinceLastHarvest = block.timestamp - tree.lastHarvestTime;
-        nextHarvestTime = tree.lastHarvestTime + cycleDuration - (timeSinceLastHarvest % cycleDuration);
+        uint256 timeUntilNextHarvest = cycleDuration - (timeSinceLastHarvest % cycleDuration);
+        nextHarvestTime = block.timestamp + timeUntilNextHarvest;
     }
 
     function getTreeDetailsByOwner(
@@ -265,7 +266,7 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
 
         uint256 index = 0;
         for (uint256 i = 1; i < nextTokenId; i++) {
-            if (ownerOf(i) == _owner) {
+            if (_ownerOf(i) == _owner) {
                 tokenIds[index] = i;
 
                 (
@@ -284,6 +285,42 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
 
                 index++;
             }
+        }
+    }
+
+    // NEW FUNCTION: Get all tree types data for frontend
+    function getAllTreeTypes()
+        external
+        view
+        returns (
+            uint8[] memory treeTypes,
+            string[] memory names,
+            uint256[] memory basePrices,
+            uint256[] memory currentPrices,
+            uint256[] memory harvestCycleMonths,
+            uint256[] memory profitRatesPerCycle,
+            uint256[] memory yearlyAppreciations
+        )
+    {
+        treeTypes = new uint8[](5);
+        names = new string[](5);
+        basePrices = new uint256[](5);
+        currentPrices = new uint256[](5);
+        harvestCycleMonths = new uint256[](5);
+        profitRatesPerCycle = new uint256[](5);
+        yearlyAppreciations = new uint256[](5);
+
+        for (uint i = 0; i < 5; i++) {
+            TreeType treeType = TreeType(i);
+            TreeInfo memory info = treeTypeInfo[treeType];
+
+            treeTypes[i] = uint8(treeType);
+            names[i] = info.name;
+            basePrices[i] = info.basePrice;
+            currentPrices[i] = getCurrentTreePrice(treeType);
+            harvestCycleMonths[i] = info.harvestCycleMonths;
+            profitRatesPerCycle[i] = info.profitRatePerCycle;
+            yearlyAppreciations[i] = info.yearlyAppreciation;
         }
     }
 
