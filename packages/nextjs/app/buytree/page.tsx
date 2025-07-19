@@ -21,6 +21,7 @@ import { formatEther, parseEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { SyncLoader } from "react-spinners"
 
 // Contract ABI for the functions we need
 
@@ -81,9 +82,9 @@ const BuyTree: NextPage = () => {
     contractName: "FruitTreeNFT",
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(connectedAddress)
-  },[])
+  }, [])
 
   async function HandleMintTree() {
     await mintTree({
@@ -227,10 +228,14 @@ const BuyTree: NextPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-green-600 text-xl">Loading tree data...</p>
+          <SyncLoader
+            color={`green`}
+            size={10}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
       </div>
     );
@@ -253,13 +258,13 @@ const BuyTree: NextPage = () => {
       <main className="max-w-7xl mx-auto px-4 py-20">
         {/* Page Title */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-800 mb-4">Buy Your Fruit Trees</h1>
-          <p className="text-xl text-green-600 max-w-2xl mx-auto">Choose from our collection of fruit tree NFTs and start earning passive income
+          <h1 className="text-4xl font-bold text-emerald-600 mb-4">Buy Your Fruit Trees</h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">Choose from our collection of fruit tree NFTs and start earning passive income
           </p>
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-sm">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="relative">
@@ -295,7 +300,7 @@ const BuyTree: NextPage = () => {
           {filteredTrees.map(tree => (
             <div
               key={tree.treeType}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 transform hover:scale-101"
             >
               <div className="relative p-6 pb-4">
                 <div className="flex justify-between items-start mb-4">
@@ -318,7 +323,7 @@ const BuyTree: NextPage = () => {
                   </button>
                 </div>
 
-                <p className="text-green-600 text-sm mb-4">{tree.description}</p>
+                <p className="text-slate-600 text-sm mb-4">{tree.description}</p>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
@@ -327,7 +332,7 @@ const BuyTree: NextPage = () => {
                     <div>
                       <div className="text-xs text-gray-500">Current Price</div>
                       <div className="font-semibold text-green-800">
-                        {parseFloat(formatEther(tree.currentPrice)).toFixed(3)} ETH
+                        {parseFloat(formatEther(tree.currentPrice)).toFixed(3)} tBNB
                       </div>
                     </div>
                   </div>
@@ -350,7 +355,7 @@ const BuyTree: NextPage = () => {
                     <div>
                       <div className="text-xs text-gray-500">Profit/Cycle</div>
                       <div className="font-semibold text-green-800">
-                        {parseFloat(formatEther(tree.profitRatePerCycle)).toFixed(3)} ETH
+                        {parseFloat(formatEther(tree.profitRatePerCycle)).toFixed(3)} tBNB
                       </div>
                     </div>
                   </div>
@@ -360,7 +365,7 @@ const BuyTree: NextPage = () => {
                 <div className="mb-4 p-3 bg-green-50 rounded-lg">
                   <div className="text-xs text-gray-600 mb-1">Estimated Annual Profit</div>
                   <div className="font-bold text-green-700">
-                    {calculateAnnualReturn(tree.profitRatePerCycle, tree.harvestCycleMonths)} ETH/year
+                    {calculateAnnualReturn(tree.profitRatePerCycle, tree.harvestCycleMonths)} tBNB/year
                   </div>
                 </div>
 
@@ -369,8 +374,8 @@ const BuyTree: NextPage = () => {
                   onClick={() => handlePurchase(tree)}
                   disabled={!isConnected}
                   className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${isConnected
-                      ? "bg-green-600 hover:bg-green-700 text-white"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                 >
                   {!isConnected ? "Connect Wallet" : isPending ? "Processing..." : "Buy Tree NFT"}

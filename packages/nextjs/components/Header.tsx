@@ -26,6 +26,10 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Profile",
     href: "/profile",
+  },
+  {
+    label: "Marketplace",
+    href: "/marketplace",
   }
 ];
 
@@ -43,8 +47,8 @@ export const HeaderMenuLinks = ({ mobile = false, onLinkClick }: { mobile?: bool
               onClick={onLinkClick}
               className={`
                 relative px-10 py-3 font-medium text-base transition-all duration-300 group hover:underline hover:underline-offset-6
-                ${mobile 
-                  ? 'block text-slate-700 hov er:text-emerald-600 hover:bg-emerald-50 rounded-lg' 
+                ${mobile
+                  ? 'block text-slate-700 hov er:text-emerald-600 hover:bg-emerald-50 rounded-lg'
                   : `text-slate-700 hover:text-emerald-600 ${isActive ? 'text-emerald-600' : ''}`
                 }
               `}
@@ -105,14 +109,14 @@ export const Header = () => {
     <>
       <header className={`
         fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        ${isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-slate-100/50 border-b border-slate-200/50' 
+        ${isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-slate-100/50 border-b border-slate-200/50'
           : 'bg-white/80 backdrop-blur-sm'
         }
       `}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            
+
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
@@ -139,7 +143,7 @@ export const Header = () => {
                   <FaucetButton />
                 </div>
               )}
-              
+
               <RainbowKitCustomConnectButton />
 
               {/* Mobile menu button */}
@@ -160,8 +164,8 @@ export const Header = () => {
         {/* Mobile Navigation */}
         <div className={`
           lg:hidden transition-all duration-300 overflow-hidden
-          ${isMobileMenuOpen 
-            ? 'max-h-96 opacity-100' 
+          ${isMobileMenuOpen
+            ? 'max-h-96 opacity-100'
             : 'max-h-0 opacity-0'
           }
         `}>
@@ -171,7 +175,7 @@ export const Header = () => {
                 <ul className="space-y-1">
                   <HeaderMenuLinks mobile={true} onLinkClick={closeMobileMenu} />
                 </ul>
-                
+
                 {/* Mobile Faucet Button */}
                 {isLocalNetwork && (
                   <div className="mt-4 pt-4 border-t border-slate-200">
@@ -186,7 +190,7 @@ export const Header = () => {
 
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
           onClick={closeMobileMenu}
         />
