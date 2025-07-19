@@ -53,26 +53,26 @@ const ANIMATION_CONFIG = {
 const HOW_IT_WORKS_STEPS: StepInfo[] = [
   {
     icon: Wallet,
-    title: "Connect & Fund",
-    description: "Connect your wallet and choose your investment amount from our curated tree portfolio",
+    title: "Buy An NFTree",
+    description: "Buy an NFTree of your choice,And A farmer will be the caretaker of your NFTree",
     step: 1
   },
   {
     icon: TreePine,
     title: "Watch Growth",
-    description: "Monitor your tree's development through our real-time dashboard with NFT value tracking",
+    description: "As the tree grows,the Value of the NFTree grows realtime and watch the growth realtime,The tree will be well taken care by the caretakers ",
     step: 2
   },
   {
     icon: TrendingUp,
     title: "Earn Yields",
-    description: "Receive automated annual returns directly to your wallet when trees begin producing",
+    description: "Recieve Produce Yields,when the produce is harvested,The caretakers are given a portion of the harvest profit",
     step: 3
   },
   {
     icon: Coins,
-    title: "Reinvest or Withdraw",
-    description: "Scale your portfolio by reinvesting returns or withdraw profits at any time",
+    title: "Reinvest or Sell",
+    description: "Scale your earnings by providing a Boost to your NFTree or sell your NFTree in the marketplace for BNB",
     step: 4
   }
 ];
@@ -199,8 +199,7 @@ const Landing: NextPage = () => {
 
             {/* Description */}
             <p className="hero-description opacity-0 text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
-              Invest in blockchain-verified virtual trees and earn consistent returns while contributing
-              to environmental sustainability. Join the future of green finance.
+              Buy Trees as NFTs and Earn-On-The-Go as trees grow.And hey, Why Not contribute to the Nature who made you who you are now. 
             </p>
 
             {/* Buttons */}
@@ -213,7 +212,7 @@ const Landing: NextPage = () => {
                 disabled={!isMounted || !isConnected}
                 onClick={handleStartInvesting}
               >
-                {!isMounted ? 'Loading...' : isConnected ? 'Start Investing' : 'Connect Wallet First'}
+                {!isMounted ? 'Loading...' : isConnected ? 'Want an NFTree?' : 'Connect Wallet First'}
                 {isMounted && isConnected && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
               </button>
 
@@ -252,10 +251,10 @@ const Landing: NextPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="animate-on-scroll text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
-              Simple, Transparent Process
+              What We Do
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Get started with sustainable investing in just four easy steps
+              We are a group of people who want the environment to be back greener than ever.
             </p>
           </div>
 
