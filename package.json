@@ -50,11 +50,17 @@
     "verify": "yarn hardhat:verify"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "husky": "~9.1.6",
-    "lint-staged": "~13.2.2"
+    "lint-staged": "~13.2.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
   },
   "packageManager": "yarn@3.2.3",
   "engines": {
     "node": ">=20.18.3"
+  },
+  "dependencies": {
+    "lucide-react": "^0.525.0"
   }
 }
