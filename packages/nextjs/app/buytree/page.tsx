@@ -53,7 +53,7 @@ const contractABI = [
 ];
 
 // Replace with your actual contract address
-const CONTRACT_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" as const;
+const CONTRACT_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9" as const;
 
 interface TreeData {
   treeType: number;

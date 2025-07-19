@@ -50,11 +50,27 @@ const ProfilePage = () => {
     }
   }, [ownedTrees]);
 
-  // Grouping trees and counting duplicates
   const groupedTrees = treeNames.reduce((acc: Record<string, { count: number; emoji: string; rarity: string }>, treeName) => {
-    const metadataEntry = Object.values(treeMetadata).find(meta => treeName.toLowerCase().includes(meta.description.split(" ")[0].toLowerCase()));
-    const emoji = metadataEntry?.emoji || "🌳";
-    const rarity = metadataEntry?.rarity || "Common";
+    let emoji = "🌳";
+    let rarity = "Common";
+
+    // Try to map based on known tree types in tree names
+    if (treeName.toLowerCase().includes("mango")) {
+      emoji = treeMetadata[0].emoji;
+      rarity = treeMetadata[0].rarity;
+    } else if (treeName.toLowerCase().includes("coconut")) {
+      emoji = treeMetadata[1].emoji;
+      rarity = treeMetadata[1].rarity;
+    } else if (treeName.toLowerCase().includes("guava")) {
+      emoji = treeMetadata[2].emoji;
+      rarity = treeMetadata[2].rarity;
+    } else if (treeName.toLowerCase().includes("rambutan")) {
+      emoji = treeMetadata[3].emoji;
+      rarity = treeMetadata[3].rarity;
+    } else if (treeName.toLowerCase().includes("jackfruit")) {
+      emoji = treeMetadata[4].emoji;
+      rarity = treeMetadata[4].rarity;
+    }
 
     if (acc[treeName]) {
       acc[treeName].count += 1;
@@ -64,6 +80,7 @@ const ProfilePage = () => {
 
     return acc;
   }, {});
+
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
