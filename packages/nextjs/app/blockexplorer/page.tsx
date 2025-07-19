@@ -58,7 +58,7 @@ const BlockExplorer: NextPage = () => {
     if (hasError) {
       notification.error(
         <>
-          <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
+          <p className="font-bold mt-0 mb-1"></p>
           <p className="m-0">
             - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
           </p>
