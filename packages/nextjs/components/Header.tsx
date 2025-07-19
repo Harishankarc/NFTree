@@ -20,6 +20,9 @@ export const menuLinks: HeaderMenuLink[] = [
   },{
     label: "Buy Tree",
     href: "/buytree",
+  },{
+    label: "Profile",
+    href: "/profile",
   }
 
 ];
