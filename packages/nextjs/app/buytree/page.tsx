@@ -49,7 +49,7 @@ const contractABI = [
 ];
 
 // Replace with your actual contract address
-const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512" as const;
+const CONTRACT_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" as const;
 
 interface TreeData {
   treeType: number;
@@ -229,33 +229,6 @@ const BuyTree: NextPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center text-green-700 hover:text-green-800 transition-colors">
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              <span className="font-semibold">Back to Home</span>
-            </Link>
-
-            <div className="flex items-center space-x-4">
-              {/* Wallet Status */}
-              {isConnected && connectedAddress ? (
-                <div className="flex items-center bg-green-100 px-4 py-2 rounded-full">
-                  <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                  <Address address={connectedAddress} />
-                </div>
-              ) : (
-                <div className="flex items-center bg-yellow-100 px-4 py-2 rounded-full">
-                  <Wallet className="h-4 w-4 text-yellow-600 mr-2" />
-                  <span className="text-yellow-700">Connect Wallet</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Page Title */}
@@ -376,11 +349,10 @@ const BuyTree: NextPage = () => {
                 <button
                   onClick={() => handlePurchase(tree)}
                   disabled={!isConnected}
-                  className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${
-                    isConnected
+                  className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${isConnected
                       ? "bg-green-600 hover:bg-green-700 text-white"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   {!isConnected ? "Connect Wallet" : isPending ? "Processing..." : "Buy Tree NFT"}
                 </button>
