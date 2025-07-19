@@ -103,12 +103,12 @@ const useAnimations = () => {
   useEffect(() => {
     // Hero animations with stagger
     const heroElements = [".hero-badge", ".hero-title", ".hero-description", ".hero-buttons", ".hero-stats"];
-    
-    gsap.fromTo(heroElements, 
+
+    gsap.fromTo(heroElements,
       { y: 60, opacity: 0 },
-      { 
-        y: 0, 
-        opacity: 1, 
+      {
+        y: 0,
+        opacity: 1,
         duration: ANIMATION_CONFIG.HERO_DURATION,
         stagger: ANIMATION_CONFIG.HERO_STAGGER,
         delay: ANIMATION_CONFIG.HERO_DELAY,
@@ -139,7 +139,7 @@ const useAnimations = () => {
     gsap.utils.toArray([".hover-card"]).forEach((card: any) => {
       const tl = gsap.timeline({ paused: true });
       tl.to(card, { scale: ANIMATION_CONFIG.CARD_HOVER_SCALE, duration: 0.3, ease: "power2.out" });
-      
+
       card.addEventListener('mouseenter', () => tl.play());
       card.addEventListener('mouseleave', () => tl.reverse());
     });
@@ -166,7 +166,7 @@ const Landing: NextPage = () => {
 
   const handleStartInvesting = useCallback(() => {
     if (!isConnected || !isMounted) return;
-    console.log('Starting investment flow');
+    window.location.href = '/buytree'
   }, [isConnected, isMounted]);
 
   const handleLearnMore = useCallback(() => {
@@ -176,7 +176,7 @@ const Landing: NextPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Navigation */}
-      
+
 
       {/* Hero Section */}
       <section className="pt-24 pb-12 px-6">
@@ -199,25 +199,24 @@ const Landing: NextPage = () => {
 
             {/* Description */}
             <p className="hero-description opacity-0 text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
-              Invest in blockchain-verified virtual trees and earn consistent returns while contributing 
+              Invest in blockchain-verified virtual trees and earn consistent returns while contributing
               to environmental sustainability. Join the future of green finance.
             </p>
 
             {/* Buttons */}
             <div className="hero-buttons opacity-0 flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <button
-                className={`group px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
-                  !isMounted || !isConnected
-                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
-                }`}
+                className={`group px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center gap-2 ${!isMounted || !isConnected
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                  }`}
                 disabled={!isMounted || !isConnected}
                 onClick={handleStartInvesting}
               >
                 {!isMounted ? 'Loading...' : isConnected ? 'Start Investing' : 'Connect Wallet First'}
                 {isMounted && isConnected && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
               </button>
-              
+
               <button
                 className="px-8 py-4 border border-slate-300 hover:border-slate-400 text-slate-700 hover:text-slate-800 rounded-xl text-lg font-semibold transition-all duration-300 hover:bg-slate-50"
                 onClick={handleLearnMore}
@@ -246,7 +245,7 @@ const Landing: NextPage = () => {
       </section>
 
       {/* Tree Portfolio Preview */}
-      
+
 
       {/* How It Works */}
       <section id="how-it-works" className="py-20 px-6">
@@ -262,8 +261,8 @@ const Landing: NextPage = () => {
 
           <div className="relative">
             {/* Connection line */}
-            
-            
+
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {HOW_IT_WORKS_STEPS.map((step, index) => {
                 const IconComponent = step.icon;
@@ -277,7 +276,7 @@ const Landing: NextPage = () => {
                         {step.step}
                       </div>
                     </div>
-                    
+
                     <h3 className="text-xl font-semibold text-slate-800 mb-3">{step.title}</h3>
                     <p className="text-slate-600 leading-relaxed">{step.description}</p>
                   </div>
