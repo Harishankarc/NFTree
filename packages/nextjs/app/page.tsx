@@ -401,11 +401,10 @@ const Landing: NextPage = () => {
 
             <div className="hero-buttons opacity-0 flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <button
-                className={`group px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
-                  !isMounted || !isConnected
+                className={`group px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center gap-2 ${!isMounted || !isConnected
                     ? "bg-slate-200 text-slate-400 cursor-not-allowed"
                     : "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
-                }`}
+                  }`}
                 disabled={!isMounted || !isConnected}
                 onClick={handleStartInvesting}
               >

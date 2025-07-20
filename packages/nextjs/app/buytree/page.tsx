@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   CheckCircle,
@@ -52,7 +53,7 @@ interface TreeData {
   harvestCycleMonths: number;
   profitRatePerCycle: bigint;
   yearlyAppreciation: number;
-  emoji: string;
+  imagePath: string;
   description: string;
   rarity: string;
 }
@@ -106,26 +107,30 @@ const BuyTree: NextPage = () => {
   // Write contract function
   const { writeContract, isPending } = useWriteContract();
 
-  // Tree metadata (emojis, descriptions, rarity)
+  // Tree metadata (images, descriptions, rarity)
   const treeMetadata = {
-    0: { emoji: "🥭", description: "Sweet mango trees with high returns and delicious fruit yields.", rarity: "Rare" },
+    0: { 
+      imagePath: "/assets/mango.webp", 
+      description: "Sweet mango trees with high returns and delicious fruit yields.", 
+      rarity: "Rare" 
+    },
     1: {
-      emoji: "🥥",
+      imagePath: "/assets/coconut.webp",
       description: "Tropical coconut trees with steady yields and excellent drought resistance.",
       rarity: "Common",
     },
     2: {
-      emoji: "🍈",
+      imagePath: "/assets/guava.webp",
       description: "Fast-growing guava with quick yields and multiple harvests per year.",
       rarity: "Common",
     },
     3: {
-      emoji: "🌺",
+      imagePath: "/assets/rambutan.webp",
       description: "Exotic rambutan trees with premium tropical fruits and consistent returns.",
       rarity: "Epic",
     },
     4: {
-      emoji: "🥭",
+      imagePath: "/assets/jackfruit.webp",
       description: "Large jackfruit trees with substantial yields and long-term growth potential.",
       rarity: "Epic",
     },
@@ -151,7 +156,7 @@ const BuyTree: NextPage = () => {
         harvestCycleMonths: 6,
         profitRatePerCycle: produceAppreciations[index],
         yearlyAppreciation: Number(baseAppreciations[index]),
-        emoji: treeMetadata[treeType as keyof typeof treeMetadata]?.emoji || "🌳",
+        imagePath: treeMetadata[treeType as keyof typeof treeMetadata]?.imagePath || "/assets/default-tree.webp",
         description: treeMetadata[treeType as keyof typeof treeMetadata]?.description || "A beautiful fruit tree.",
         rarity: treeMetadata[treeType as keyof typeof treeMetadata]?.rarity || "Common",
       }));
@@ -299,7 +304,19 @@ const BuyTree: NextPage = () => {
               <div className="relative p-6 pb-4">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center">
-                    <span className="text-4xl mr-3">{tree.emoji}</span>
+                    <div className="w-12 h-12 mr-3 relative rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <Image
+                        src={tree.imagePath}
+                        alt={tree.name}
+                        width={48}
+                        height={48}
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          // Fallback to a default image if the specific fruit image is not found
+                          e.currentTarget.src = "/assets/default-tree.webp";
+                        }}
+                      />
+                    </div>
                     <div>
                       <h3 className="text-xl font-bold text-green-800">{tree.name}</h3>
                       <span
@@ -386,7 +403,15 @@ const BuyTree: NextPage = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             <div className="text-center mb-6">
-              <span className="text-4xl">{selectedTree.emoji}</span>
+              <div className="w-16 h-16 mx-auto mb-3 relative rounded-lg overflow-hidden bg-gray-100">
+                <Image
+                  src={selectedTree.imagePath}
+                  alt={selectedTree.name}
+                  width={64}
+                  height={64}
+                  className="object-cover w-full h-full"
+                />
+              </div>
               <h3 className="text-2xl font-bold text-green-800 mt-2">{selectedTree.name}</h3>
             </div>
 
