@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowLeft,
   CheckCircle,
@@ -109,10 +109,10 @@ const BuyTree: NextPage = () => {
 
   // Tree metadata (images, descriptions, rarity)
   const treeMetadata = {
-    0: { 
-      imagePath: "/assets/mango.webp", 
-      description: "Sweet mango trees with high returns and delicious fruit yields.", 
-      rarity: "Rare" 
+    0: {
+      imagePath: "/assets/mango.webp",
+      description: "Sweet mango trees with high returns and delicious fruit yields.",
+      rarity: "Rare",
     },
     1: {
       imagePath: "/assets/coconut.webp",
@@ -311,7 +311,7 @@ const BuyTree: NextPage = () => {
                         width={48}
                         height={48}
                         className="object-cover w-full h-full"
-                        onError={(e) => {
+                        onError={e => {
                           // Fallback to a default image if the specific fruit image is not found
                           e.currentTarget.src = "/assets/default-tree.webp";
                         }}

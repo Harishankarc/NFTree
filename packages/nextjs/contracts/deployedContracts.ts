@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   97: {
     FruitTreeNFT: {
-      address: "0x0B4F453438D13fbA626d66F401C8B7045d4e996D",
+      address: "0x6A0e1cef3D170eCa180349c5AB6492afD807e44B",
       abi: [
         {
           inputs: [],

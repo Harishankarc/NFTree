@@ -38,7 +38,7 @@ const config: HardhatUserConfig = {
     ],
   },
   // defaultNetwork: "virtualbnb"
-  defaultNetwork: "hardhat",
+  defaultNetwork: "bscTestnet",
   // defaultNetwork,
   namedAccounts: {
     deployer: {
@@ -49,6 +49,11 @@ const config: HardhatUserConfig = {
   networks: {
     // View the networks that are pre-configured.
     // If the network you are looking for is not here you can add new network settings
+    bscTestnet: {
+      url: "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
+      chainId: 97,
+      accounts: ["fc555c26775572320d659dafdec1ef98f703d7cdbea292d1240a901c920c99ae"],
+    },
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
@@ -57,8 +62,8 @@ const config: HardhatUserConfig = {
     },
     virtualbnb: {
       url: "https://virtual.binance-rialto.rpc.tenderly.co/996f58c5-1216-4c97-be7c-5d9612fd53a9", // your Tenderly RPC URL
-      chainId: 97,  // or check your Tenderly fork Chain ID
-      accounts: ['6eb7ed8f87b3f8e52e672ec3a85bd743da047fd87ef7b462337c2737950aac25'],  // Use a funded account's private key
+      chainId: 97, // or check your Tenderly fork Chain ID
+      accounts: ["6eb7ed8f87b3f8e52e672ec3a85bd743da047fd87ef7b462337c2737950aac25"], // Use a funded account's private key
     },
     mainnet: {
       url: "https://mainnet.rpc.buidlguidl.com",
