@@ -211,6 +211,8 @@ const ProfilePage = () => {
   const { address: connectedAddress, isConnected } = useAccount();
   const [treeData, setTreeData] = useState<TreeData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedTree, setSelectedTree] = useState<TreeData | null>(null);
+  const [isSellModalOpen, setSellModalOpen] = useState(false);
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName: "FruitTreeNFT",
@@ -495,30 +497,42 @@ const ProfilePage = () => {
               </div>
             </div>
           )}
+          <SellModal
+            isOpen={isSellModalOpen}
+            onClose={() => setSellModalOpen(false)}
+            tree={selectedTree}
+            availableQuantity={
+              selectedTree
+                ? treeData.filter(t => t.name === selectedTree.name).length
+                : 0
+            }
+            onConfirmSell={handleConfirmSell}
+          />
         </div>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+          <style jsx>{`
+          @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
 
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+          @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
 
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out forwards;
-        }
+          .animate-fade-in {
+            animation: fade-in 0.8s ease-out forwards;
+          }
 
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out forwards;
-          opacity: 0;
-          animation-fill-mode: forwards;
-        }
-      `}</style>
-    </div>
+          .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+          }
+        `}</style>
+      </div>
+    </>
   );
 };
 
