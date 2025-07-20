@@ -131,18 +131,10 @@ const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: 
                 <div className="text-lg font-bold text-slate-800">{tree.value} ETH</div>
                 <div className="text-xs text-slate-600">Current Value</div>
               </div>
-              <div className="bg-gradient-to-br from-green-50/80 to-emerald-50/80 rounded-xl p-4 border border-emerald-200/60">
-                <div className="text-lg font-bold text-emerald-800">{tree.availableHarvests}</div>
-                <div className="text-xs text-emerald-600">Available Harvests</div>
-              </div>
             </div>
 
             {/* Additional Stats */}
             <div className="bg-slate-50/80 rounded-xl p-4 border border-slate-200/60">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-slate-600">Total Harvests</span>
-                <span className="text-sm font-semibold text-slate-800">{tree.totalHarvests}</span>
-              </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-slate-600">Token ID</span>
                 <span className="text-sm font-semibold text-slate-800">#{tree.tokenId}</span>
