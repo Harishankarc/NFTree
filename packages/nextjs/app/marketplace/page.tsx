@@ -535,7 +535,7 @@ const MarketplacePage: NextPage = () => {
               <h2 className="text-xl font-bold text-green-800 mb-4">Your Trees</h2>
 
               {ownedTreesData && ownedTreesData[0]?.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-4 shadow-sm">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {ownedTreesData[0].map((tokenId, index) => (
                       <div

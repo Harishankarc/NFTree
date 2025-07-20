@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   97: {
     FruitTreeNFT: {
-      address: "0x18D1420aE4157c56b337F18CA70f4EF75AC6adaE",
+      address: "0x0B4F453438D13fbA626d66F401C8B7045d4e996D",
       abi: [
         {
           inputs: [],
@@ -1376,12 +1376,12 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 58837465,
+      deployedOnBlock: 58837494,
     },
   },
   31337: {
     FruitTreeNFT: {
-      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
       abi: [
         {
           inputs: [],
@@ -1591,31 +1591,6 @@ const deployedContracts = {
           anonymous: false,
           inputs: [
             {
-              indexed: true,
-              internalType: "uint256",
-              name: "tokenId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "owner",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "profit",
-              type: "uint256",
-            },
-          ],
-          name: "HarvestClaimed",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
               indexed: false,
               internalType: "uint256[]",
               name: "tokenIds",
@@ -1661,25 +1636,6 @@ const deployedContracts = {
             },
           ],
           name: "OwnershipTransferred",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "owner",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "ProfitWithdrawn",
           type: "event",
         },
         {
@@ -1789,19 +1745,6 @@ const deployedContracts = {
           type: "event",
         },
         {
-          inputs: [],
-          name: "SECONDS_PER_MONTH",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
           inputs: [
             {
               internalType: "uint256",
@@ -1894,32 +1837,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "tokenId",
-              type: "uint256",
-            },
-          ],
-          name: "claimHarvest",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256[]",
-              name: "tokenIds",
-              type: "uint256[]",
-            },
-          ],
-          name: "claimMultipleHarvests",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
           inputs: [],
           name: "emergencyWithdraw",
           outputs: [],
@@ -1972,17 +1889,12 @@ const deployedContracts = {
             },
             {
               internalType: "uint256[]",
-              name: "harvestCycleMonths",
+              name: "baseAppreciations",
               type: "uint256[]",
             },
             {
               internalType: "uint256[]",
-              name: "profitRatesPerCycle",
-              type: "uint256[]",
-            },
-            {
-              internalType: "uint256[]",
-              name: "yearlyAppreciations",
+              name: "produceAppreciations",
               type: "uint256[]",
             },
           ],
@@ -2003,25 +1915,6 @@ const deployedContracts = {
               internalType: "address",
               name: "",
               type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "tokenId",
-              type: "uint256",
-            },
-          ],
-          name: "getAvailableHarvests",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -2081,6 +1974,40 @@ const deployedContracts = {
               internalType: "struct FruitTreeNFT.MarketplaceGroup[]",
               name: "groups",
               type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+          ],
+          name: "getOwnerTreesByType",
+          outputs: [
+            {
+              internalType: "enum FruitTreeNFT.TreeType[]",
+              name: "treeTypes",
+              type: "uint8[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "quantities",
+              type: "uint256[]",
+            },
+            {
+              internalType: "uint256[][]",
+              name: "tokenIdsByType",
+              type: "uint256[][]",
+            },
+            {
+              internalType: "uint256[][]",
+              name: "valuesByType",
+              type: "uint256[][]",
             },
           ],
           stateMutability: "view",
@@ -2178,18 +2105,13 @@ const deployedContracts = {
             },
             {
               internalType: "uint256",
-              name: "availableHarvests",
+              name: "mintTime",
               type: "uint256",
             },
             {
-              internalType: "uint256",
-              name: "totalHarvests",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "nextHarvestTime",
-              type: "uint256",
+              internalType: "address",
+              name: "treeOwner",
+              type: "address",
             },
           ],
           stateMutability: "view",
@@ -2222,17 +2144,7 @@ const deployedContracts = {
             },
             {
               internalType: "uint256[]",
-              name: "availableHarvestsArray",
-              type: "uint256[]",
-            },
-            {
-              internalType: "uint256[]",
-              name: "totalHarvestsArray",
-              type: "uint256[]",
-            },
-            {
-              internalType: "uint256[]",
-              name: "nextHarvestTimes",
+              name: "mintTimes",
               type: "uint256[]",
             },
           ],
@@ -2263,17 +2175,12 @@ const deployedContracts = {
                 },
                 {
                   internalType: "uint256",
-                  name: "harvestCycleMonths",
+                  name: "baseAppreciation",
                   type: "uint256",
                 },
                 {
                   internalType: "uint256",
-                  name: "profitRatePerCycle",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "yearlyAppreciation",
+                  name: "produceAppreciation",
                   type: "uint256",
                 },
               ],
@@ -2405,6 +2312,11 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              internalType: "uint256",
+              name: "price",
+              type: "uint256",
+            },
+            {
               internalType: "bool",
               name: "isActive",
               type: "bool",
@@ -2498,25 +2410,6 @@ const deployedContracts = {
             },
           ],
           name: "ownerTreeCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "profitBalances",
           outputs: [
             {
               internalType: "uint256",
@@ -2765,17 +2658,12 @@ const deployedContracts = {
             },
             {
               internalType: "uint256",
-              name: "harvestCycleMonths",
+              name: "baseAppreciation",
               type: "uint256",
             },
             {
               internalType: "uint256",
-              name: "profitRatePerCycle",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "yearlyAppreciation",
+              name: "produceAppreciation",
               type: "uint256",
             },
           ],
@@ -2808,19 +2696,9 @@ const deployedContracts = {
               type: "uint256",
             },
             {
-              internalType: "uint256",
-              name: "lastHarvestTime",
-              type: "uint256",
-            },
-            {
               internalType: "address",
               name: "owner",
               type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "totalHarvests",
-              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -2845,17 +2723,12 @@ const deployedContracts = {
             },
             {
               internalType: "uint256",
-              name: "_harvestCycleMonths",
+              name: "_baseAppreciation",
               type: "uint256",
             },
             {
               internalType: "uint256",
-              name: "_profitRatePerCycle",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "_yearlyAppreciation",
+              name: "_produceAppreciation",
               type: "uint256",
             },
           ],
@@ -2872,19 +2745,12 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "withdrawProfits",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
           stateMutability: "payable",
           type: "receive",
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 26,
+      deployedOnBlock: 18,
     },
   },
 } as const;

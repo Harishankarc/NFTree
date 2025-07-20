@@ -7,7 +7,7 @@ export const virtualBNB = defineChain({
   network: "virtualbnb",
   nativeCurrency: { name: "TBNB", symbol: "TBNB", decimals: 18 },
   rpcUrls: {
-    default: { http: ["https://virtual.binance-rialto.rpc.tenderly.co/996f58c5-1216-4c97-be7c-5d9612fd53a9"] },
+    default: { http: ["https://virtual.binance-rialto.rpc.tenderly.co/11a3ec25-145e-428a-9298-a93766853261"] },
   },
   blockExplorers: {
     default: { name: "Tenderly Dashboard", url: "https://dashboard.tenderly.co/" },

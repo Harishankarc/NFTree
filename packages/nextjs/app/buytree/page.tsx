@@ -69,7 +69,7 @@ const BuyTree: NextPage = () => {
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName: "FruitTreeNFT",
   });
-  const CONTRACT_ADDRESS = "0x18D1420aE4157c56b337F18CA70f4EF75AC6adaE" as const;
+  const CONTRACT_ADDRESS = deployedContractData?.address;
   console.log(deployedContractData?.address);
   const { data: ownedTrees } = useReadContract({
     address: CONTRACT_ADDRESS,

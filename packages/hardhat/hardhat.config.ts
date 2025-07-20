@@ -37,7 +37,9 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  defaultNetwork: "virtualbnb",
+  // defaultNetwork: "virtualbnb"
+  defaultNetwork: "hardhat",
+  // defaultNetwork,
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
