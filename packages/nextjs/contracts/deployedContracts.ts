@@ -1515,7 +1515,7 @@ const deployedContracts = {
   },
   31337: {
     FruitTreeNFT: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [],
@@ -2633,7 +2633,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 4,
+      deployedOnBlock: 1,
     },
   },
 } as const;

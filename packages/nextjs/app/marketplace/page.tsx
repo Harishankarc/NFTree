@@ -516,17 +516,15 @@ const Marketplace: NextPage = () => {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-2xl font-bold text-emerald-700 mb-2">
+                                        <div className="text-xl font-medium text-emerald-700 mb-2">
                                             {parseFloat(formatEther(listing.price)).toFixed(3)} tBNB
                                         </div>
                                         <button
                                             onClick={() => handlePurchase(listing)}
                                             disabled={!isConnected || listing.seller.toLowerCase() === connectedAddress?.toLowerCase()}
-                                            className={`px-6 py-2 rounded-full font-semibold transition-all ${!isConnected
-                                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                                : listing.seller.toLowerCase() === connectedAddress?.toLowerCase()
-                                                    ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                                    : "bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700"
+                                            className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${isConnected
+                                                ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
+                                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
                                                 }`}
                                         >
                                             {!isConnected
