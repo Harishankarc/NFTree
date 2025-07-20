@@ -231,7 +231,7 @@ const BuyTree: NextPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#F3F5F1] flex items-center justify-center">
         <div className="text-center">
           <SyncLoader color={`green`} size={10} aria-label="Loading Spinner" data-testid="loader" />
         </div>
@@ -241,7 +241,7 @@ const BuyTree: NextPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+      <div className="min-h-screen bg-[#F3F5F1] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-xl mb-4">Error loading tree data</p>
           <p className="text-gray-600">Please make sure your wallet is connected and the contract is deployed</p>
@@ -251,7 +251,7 @@ const BuyTree: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50">
+    <div className="min-h-screen bg-[#F3F5F1]">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-20">
         {/* Page Title */}
