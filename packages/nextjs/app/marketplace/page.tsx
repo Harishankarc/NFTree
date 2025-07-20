@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   CheckCircle,
@@ -105,7 +106,7 @@ interface TreeData {
   harvestCycleMonths: number;
   profitRatePerCycle: bigint;
   yearlyAppreciation: number;
-  emoji: string;
+  imageUrl: string;
   description: string;
   rarity: string;
 }
@@ -186,26 +187,30 @@ const MarketplacePage: NextPage = () => {
     functionName: "getAllTreeTypes",
   });
 
-  // Tree metadata (emojis, descriptions, rarity)
+  // Tree metadata (images, descriptions, rarity)
   const treeMetadata = {
-    0: { emoji: "🥭", description: "Sweet mango trees with high returns and delicious fruit yields.", rarity: "Rare" },
+    0: { 
+      imageUrl: "/assets/mango.webp", 
+      description: "Sweet mango trees with high returns and delicious fruit yields.", 
+      rarity: "Rare" 
+    },
     1: {
-      emoji: "🥥",
+      imageUrl: "/assets/coconut.webp",
       description: "Tropical coconut trees with steady yields and excellent drought resistance.",
       rarity: "Common",
     },
     2: {
-      emoji: "🍈",
+      imageUrl: "/assets/guava.webp",
       description: "Fast-growing guava with quick yields and multiple harvests per year.",
       rarity: "Common",
     },
     3: {
-      emoji: "🌺",
+      imageUrl: "/assets/rambutan.webp",
       description: "Exotic rambutan trees with premium tropical fruits and consistent returns.",
       rarity: "Epic",
     },
     4: {
-      emoji: "🥭",
+      imageUrl: "/assets/jackfruit.webp",
       description: "Large jackfruit trees with substantial yields and long-term growth potential.",
       rarity: "Epic",
     },
@@ -231,7 +236,7 @@ const MarketplacePage: NextPage = () => {
         harvestCycleMonths: 6,
         profitRatePerCycle: produceAppreciations[index],
         yearlyAppreciation: Number(baseAppreciations[index]),
-        emoji: treeMetadata[treeType as keyof typeof treeMetadata]?.emoji || "🌳",
+        imageUrl: treeMetadata[treeType as keyof typeof treeMetadata]?.imageUrl || "/assets/default-tree.webp",
         description: treeMetadata[treeType as keyof typeof treeMetadata]?.description || "A beautiful fruit tree.",
         rarity: treeMetadata[treeType as keyof typeof treeMetadata]?.rarity || "Common",
       }));
@@ -439,7 +444,19 @@ const MarketplacePage: NextPage = () => {
                   <div className="relative p-6 pb-4">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center">
-                        <span className="text-4xl mr-3">{tree.emoji}</span>
+                        <div className="w-12 h-12 mr-3 relative">
+                          <Image
+                            src={tree.imageUrl}
+                            alt={tree.name}
+                            width={48}
+                            height={48}
+                            className="w-full h-full object-cover rounded-lg"
+                            onError={(e) => {
+                              // Fallback to a default image if the WebP fails to load
+                              e.currentTarget.src = "/assets/default-tree.webp";
+                            }}
+                          />
+                        </div>
                         <div>
                           <h3 className="text-xl font-bold text-green-800">{tree.name}</h3>
                           <span
@@ -537,34 +554,56 @@ const MarketplacePage: NextPage = () => {
               {ownedTreesData && ownedTreesData[0]?.length > 0 ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {ownedTreesData[0].map((tokenId, index) => (
-                      <div
-                        key={tokenId}
-                        className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                          selectedTokenIds.includes(Number(tokenId))
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200 hover:bg-gray-50"
-                        }`}
-                        onClick={() => toggleTokenSelection(Number(tokenId))}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-medium">{ownedTreesData[1][index]}</h3>
-                            <p className="text-sm text-gray-600">Token ID: {tokenId.toString()}</p>
-                            <p className="text-sm text-gray-600">
-                              Value: {parseFloat(formatEther(ownedTreesData[2][index])).toFixed(3)} tBNB
-                            </p>
+                    {ownedTreesData[0].map((tokenId, index) => {
+                      // Find the corresponding tree data to get the image
+                      const treeName = ownedTreesData[1][index];
+                      const correspondingTree = trees.find(t => t.name === treeName);
+                      
+                      return (
+                        <div
+                          key={tokenId}
+                          className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                            selectedTokenIds.includes(Number(tokenId))
+                              ? "border-green-500 bg-green-50"
+                              : "border-gray-200 hover:bg-gray-50"
+                          }`}
+                          onClick={() => toggleTokenSelection(Number(tokenId))}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              {correspondingTree && (
+                                <div className="w-10 h-10 mr-3 relative">
+                                  <Image
+                                    src={correspondingTree.imageUrl}
+                                    alt={correspondingTree.name}
+                                    width={40}
+                                    height={40}
+                                    className="w-full h-full object-cover rounded-lg"
+                                    onError={(e) => {
+                                      e.currentTarget.src = "/assets/default-tree.webp";
+                                    }}
+                                  />
+                                </div>
+                              )}
+                              <div>
+                                <h3 className="font-medium">{ownedTreesData[1][index]}</h3>
+                                <p className="text-sm text-gray-600">Token ID: {tokenId.toString()}</p>
+                                <p className="text-sm text-gray-600">
+                                  Value: {parseFloat(formatEther(ownedTreesData[2][index])).toFixed(3)} tBNB
+                                </p>
+                              </div>
+                            </div>
+                            <input
+                              type="checkbox"
+                              checked={selectedTokenIds.includes(Number(tokenId))}
+                              onChange={() => toggleTokenSelection(Number(tokenId))}
+                              className="h-5 w-5 text-green-600 rounded"
+                              onClick={e => e.stopPropagation()}
+                            />
                           </div>
-                          <input
-                            type="checkbox"
-                            checked={selectedTokenIds.includes(Number(tokenId))}
-                            onChange={() => toggleTokenSelection(Number(tokenId))}
-                            className="h-5 w-5 text-green-600 rounded"
-                            onClick={e => e.stopPropagation()}
-                          />
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <div className="flex justify-end mt-6">
@@ -602,14 +641,30 @@ const MarketplacePage: NextPage = () => {
                         return (
                           <div key={index} className="border border-gray-200 rounded-lg p-4">
                             <div className="flex items-center justify-between">
-                              <div>
-                                <h3 className="font-medium">{tree?.name || "Unknown Tree"}</h3>
-                                <p className="text-sm text-gray-600">
-                                  {listing.quantity} tree{listing.quantity !== 1 ? "s" : ""} listed
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  Average price: {parseFloat(formatEther(listing.averagePrice)).toFixed(3)} tBNB
-                                </p>
+                              <div className="flex items-center">
+                                {tree && (
+                                  <div className="w-10 h-10 mr-3 relative">
+                                    <Image
+                                      src={tree.imageUrl}
+                                      alt={tree.name}
+                                      width={40}
+                                      height={40}
+                                      className="w-full h-full object-cover rounded-lg"
+                                      onError={(e) => {
+                                        e.currentTarget.src = "/assets/default-tree.webp";
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                <div>
+                                  <h3 className="font-medium">{tree?.name || "Unknown Tree"}</h3>
+                                  <p className="text-sm text-gray-600">
+                                    {listing.quantity} tree{listing.quantity !== 1 ? "s" : ""} listed
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    Average price: {parseFloat(formatEther(listing.averagePrice)).toFixed(3)} tBNB
+                                  </p>
+                                </div>
                               </div>
                               <button
                                 onClick={() => handleCancelListings(listing.tokenIds)}
