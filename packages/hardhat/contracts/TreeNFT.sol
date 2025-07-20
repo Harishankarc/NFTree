@@ -542,39 +542,47 @@ contract FruitTreeNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         treeOwner = tree.owner;
     }
 
-    function getTreeDetailsByOwner(
-        address _owner
+  function getTreeDetailsByOwner(
+    address _owner
+)
+    public
+    view
+    returns (
+        uint256[] memory tokenIds,
+        string[] memory treeNames,
+        uint256[] memory currentValues,
+        uint256[] memory mintTimes
     )
-        public
-        view
-        returns (
-            uint256[] memory tokenIds,
-            string[] memory treeNames,
-            uint256[] memory currentValues,
-            uint256[] memory mintTimes
-        )
-    {
-        uint256 count = ownerTreeCount[_owner];
-        tokenIds = new uint256[](count);
-        treeNames = new string[](count);
-        currentValues = new uint256[](count);
-        mintTimes = new uint256[](count);
-
-        uint256 index = 0;
-        for (uint256 i = 1; i < nextTokenId; i++) {
-            if (_ownerOf(i) == _owner) {
-                tokenIds[index] = i;
-
-                (string memory treeName, uint256 currentValue, uint256 mintTime, ) = getTreeDetails(i);
-
-                treeNames[index] = treeName;
-                currentValues[index] = currentValue;
-                mintTimes[index] = mintTime;
-
-                index++;
-            }
+{
+    uint256 count = 0;
+    // First, count only unlisted trees
+    for (uint256 i = 1; i < nextTokenId; i++) {
+        if (_ownerOf(i) == _owner && !isListed[i]) {
+            count++;
         }
     }
+
+    tokenIds = new uint256[](count);
+    treeNames = new string[](count);
+    currentValues = new uint256[](count);
+    mintTimes = new uint256[](count);
+
+    uint256 index = 0;
+    for (uint256 i = 1; i < nextTokenId; i++) {
+        if (_ownerOf(i) == _owner && !isListed[i]) {
+            tokenIds[index] = i;
+
+            (string memory treeName, uint256 currentValue, uint256 mintTime, ) = getTreeDetails(i);
+
+            treeNames[index] = treeName;
+            currentValues[index] = currentValue;
+            mintTimes[index] = mintTime;
+
+            index++;
+        }
+    }
+}
+
 
     function getAllTreeTypes()
         external

@@ -500,14 +500,6 @@ const ProfilePage = () => {
                                   Tree{trees.length > 1 ? "s" : ""}
                                 </span>
                               </div>
-
-                              {/* Sell Button */}
-                              <button
-                                onClick={() => handleSellClick(trees[0])} // Sell the first tree of this type
-                                className="w-full px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white text-sm font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-md hover:shadow-lg opacity-0 group-hover/card:opacity-100 translate-y-2 group-hover/card:translate-y-0"
-                              >
-                                💰 Sell Tree
-                              </button>
                             </div>
                           </div>
                         </div>
