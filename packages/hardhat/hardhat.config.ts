@@ -38,7 +38,7 @@ const config: HardhatUserConfig = {
     ],
   },
   // defaultNetwork: "virtualbnb"
-  defaultNetwork: "hardhat",
+  defaultNetwork: "bscTestnet",
   // defaultNetwork,
   namedAccounts: {
     deployer: {
@@ -48,6 +48,11 @@ const config: HardhatUserConfig = {
   },
   networks: {
     // View the networks that are pre-configured.
+    bscTestnet: {
+      url: 'https://data-seed-prebsc-1-s1.bnbchain.org:8545',
+      chainId: 97,
+      accounts: ["fe99027420ed0a96ca8c9fce377e35071124fd24f1c7e1560540e4efc2c2d694"],
+    },
     // If the network you are looking for is not here you can add new network settings
     hardhat: {
       forking: {
