@@ -357,7 +357,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50/30 to-emerald-50/50">
+      <div className="min-h-screen bg-[#F3F5F1]">
         {/* Subtle Background Patterns */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
           <div className="absolute top-20 left-10 w-32 h-32 bg-emerald-100/50 rounded-full blur-3xl animate-pulse"></div>

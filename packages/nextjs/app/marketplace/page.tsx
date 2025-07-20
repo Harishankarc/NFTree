@@ -189,10 +189,10 @@ const MarketplacePage: NextPage = () => {
 
   // Tree metadata (images, descriptions, rarity)
   const treeMetadata = {
-    0: { 
-      imageUrl: "/assets/mango.webp", 
-      description: "Sweet mango trees with high returns and delicious fruit yields.", 
-      rarity: "Rare" 
+    0: {
+      imageUrl: "/assets/mango.webp",
+      description: "Sweet mango trees with high returns and delicious fruit yields.",
+      rarity: "Rare"
     },
     1: {
       imageUrl: "/assets/coconut.webp",
@@ -344,7 +344,7 @@ const MarketplacePage: NextPage = () => {
   };
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#F3F5F1] flex items-center justify-center">
         <div className="text-center">
           <SyncLoader color={`green`} size={10} aria-label="Loading Spinner" data-testid="loader" />
         </div>
@@ -354,7 +354,7 @@ const MarketplacePage: NextPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
+      <div className="min-h-screen bg-[#F3F5F1] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-xl mb-4">Error loading marketplace data</p>
           <p className="text-gray-600">Please make sure your wallet is connected and the contract is deployed</p>
@@ -364,7 +364,7 @@ const MarketplacePage: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50">
+    <div className="min-h-screen bg-[#F3F5F1]">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-20">
         {/* Page Title */}
@@ -532,11 +532,10 @@ const MarketplacePage: NextPage = () => {
                     <button
                       onClick={() => handlePurchaseFromMarketplace(listing)}
                       disabled={!isConnected}
-                      className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${
-                        isConnected
-                          ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
+                      className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${isConnected
+                        ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                     >
                       {!isConnected ? "Connect Wallet" : "Buy Tree"}
                     </button>
@@ -558,15 +557,14 @@ const MarketplacePage: NextPage = () => {
                       // Find the corresponding tree data to get the image
                       const treeName = ownedTreesData[1][index];
                       const correspondingTree = trees.find(t => t.name === treeName);
-                      
+
                       return (
                         <div
                           key={tokenId}
-                          className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                            selectedTokenIds.includes(Number(tokenId))
-                              ? "border-green-500 bg-green-50"
-                              : "border-gray-200 hover:bg-gray-50"
-                          }`}
+                          className={`border rounded-lg p-4 cursor-pointer transition-colors ${selectedTokenIds.includes(Number(tokenId))
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200 hover:bg-gray-50"
+                            }`}
                           onClick={() => toggleTokenSelection(Number(tokenId))}
                         >
                           <div className="flex items-center justify-between">
@@ -610,11 +608,10 @@ const MarketplacePage: NextPage = () => {
                     <button
                       onClick={handleListTrees}
                       disabled={selectedTokenIds.length === 0 || !isConnected}
-                      className={`px-6 py-3 rounded-full font-semibold ${
-                        selectedTokenIds.length > 0 && isConnected
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
+                      className={`px-6 py-3 rounded-full font-semibold ${selectedTokenIds.length > 0 && isConnected
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                     >
                       List Selected Trees
                     </button>
