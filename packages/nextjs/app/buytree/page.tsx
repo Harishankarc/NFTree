@@ -16,45 +16,33 @@ import {
 } from "lucide-react";
 import type { NextPage } from "next";
 import toast from "react-hot-toast";
+import { SyncLoader } from "react-spinners";
 import { json } from "stream/consumers";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
-import { SyncLoader } from "react-spinners"
+import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 // Contract ABI for the functions we need
 
 const contractABI = [
   {
-    inputs: [],
     name: "getAllTreeTypes",
-    outputs: [
-      { internalType: "enum FruitTreeNFT.TreeType[]", name: "treeTypes", type: "uint8[]" },
-      { internalType: "string[]", name: "names", type: "string[]" },
-      { internalType: "uint256[]", name: "basePrices", type: "uint256[]" },
-      { internalType: "uint256[]", name: "currentPrices", type: "uint256[]" },
-      { internalType: "uint256[]", name: "harvestCycleMonths", type: "uint256[]" },
-      { internalType: "uint256[]", name: "profitRatesPerCycle", type: "uint256[]" },
-      { internalType: "uint256[]", name: "yearlyAppreciations", type: "uint256[]" },
-    ],
+    type: "function",
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "enum FruitTreeNFT.TreeType", name: "_treeType", type: "uint8" },
-      { internalType: "string", name: "tokenURI", type: "string" },
+    inputs: [],
+    outputs: [
+      { name: "treeTypes", type: "uint8[]" },
+      { name: "names", type: "string[]" },
+      { name: "basePrices", type: "uint256[]" },
+      { name: "currentPrices", type: "uint256[]" },
+      { name: "baseAppreciations", type: "uint256[]" },
+      { name: "produceAppreciations", type: "uint256[]" },
     ],
-    name: "mintTree",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
   },
 ];
 
 // Replace with your actual contract address
-const CONTRACT_ADDRESS = "0xBEEcb8E8ccdc097b62eB48e410D248390f678d5F" as const;
 
 interface TreeData {
   treeType: number;
@@ -78,13 +66,24 @@ const BuyTree: NextPage = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [trees, setTrees] = useState<TreeData[]>([]);
 
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName: "FruitTreeNFT",
+  });
+  const CONTRACT_ADDRESS = "0x18D1420aE4157c56b337F18CA70f4EF75AC6adaE" as const;
+  console.log(deployedContractData?.address);
+  const { data: ownedTrees } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: contractABI,
+    functionName: "getTreeDetailsByOwner",
+    args: [connectedAddress],
+  });
   const { writeContractAsync: mintTree } = useScaffoldWriteContract({
     contractName: "FruitTreeNFT",
   });
 
   useEffect(() => {
-    console.log(connectedAddress)
-  }, [])
+    console.log(connectedAddress);
+  }, []);
 
   async function HandleMintTree() {
     await mintTree({
@@ -135,24 +134,23 @@ const BuyTree: NextPage = () => {
   // Process contract data into usable format
   useEffect(() => {
     if (treeTypesData) {
-      const [
-        treeTypes,
-        names,
-        basePrices,
-        currentPrices,
-        harvestCycleMonths,
-        profitRatesPerCycle,
-        yearlyAppreciations,
-      ] = treeTypesData as [number[], string[], bigint[], bigint[], bigint[], bigint[], bigint[]];
+      const [treeTypes, names, basePrices, currentPrices, baseAppreciations, produceAppreciations] = treeTypesData as [
+        number[],
+        string[],
+        bigint[],
+        bigint[],
+        bigint[],
+        bigint[],
+      ];
 
       const processedTrees: TreeData[] = (treeTypes as number[]).map((treeType: number, index) => ({
         treeType,
         name: names[index],
         basePrice: basePrices[index],
         currentPrice: currentPrices[index],
-        harvestCycleMonths: Number(harvestCycleMonths[index]),
-        profitRatePerCycle: profitRatesPerCycle[index],
-        yearlyAppreciation: Number(yearlyAppreciations[index]),
+        harvestCycleMonths: 6,
+        profitRatePerCycle: produceAppreciations[index],
+        yearlyAppreciation: Number(baseAppreciations[index]),
         emoji: treeMetadata[treeType as keyof typeof treeMetadata]?.emoji || "🌳",
         description: treeMetadata[treeType as keyof typeof treeMetadata]?.description || "A beautiful fruit tree.",
         rarity: treeMetadata[treeType as keyof typeof treeMetadata]?.rarity || "Common",
@@ -230,12 +228,7 @@ const BuyTree: NextPage = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-grey-50 to-white-50 flex items-center justify-center">
         <div className="text-center">
-          <SyncLoader
-            color={`green`}
-            size={10}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+          <SyncLoader color={`green`} size={10} aria-label="Loading Spinner" data-testid="loader" />
         </div>
       </div>
     );
@@ -259,7 +252,8 @@ const BuyTree: NextPage = () => {
         {/* Page Title */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-emerald-600 mb-4">Buy Your Fruit Trees</h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">Choose from our collection of fruit tree NFTs and start earning passive income
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            Choose from our collection of fruit tree NFTs and start earning passive income
           </p>
         </div>
 
@@ -373,10 +367,11 @@ const BuyTree: NextPage = () => {
                 <button
                   onClick={() => handlePurchase(tree)}
                   disabled={!isConnected}
-                  className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${isConnected
-                    ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
+                  className={`w-full py-3 px-4 rounded-full font-semibold transition-all duration-300 ${
+                    isConnected
+                      ? "bg-green-600 opacity-80 hover:bg-green-700 text-white"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
                 >
                   {!isConnected ? "Connect Wallet" : isPending ? "Processing..." : "Buy Tree NFT"}
                 </button>

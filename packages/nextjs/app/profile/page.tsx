@@ -1,43 +1,53 @@
-'use client';
+"use client";
+
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
 import { useReadContract } from "wagmi";
+import { Address } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 const treeMetadata = {
   0: { emoji: "🥭", description: "Sweet mango trees with high returns and delicious fruit yields.", rarity: "Rare" },
-  1: { emoji: "🥥", description: "Tropical coconut trees with steady yields and excellent drought resistance.", rarity: "Common" },
-  2: { emoji: "🍈", description: "Fast-growing guava with quick yields and multiple harvests per year.", rarity: "Common" },
-  3: { emoji: "🌺", description: "Exotic rambutan trees with premium tropical fruits and consistent returns.", rarity: "Epic" },
-  4: { emoji: "🍈", description: "Large jackfruit trees with substantial yields and long-term growth potential.", rarity: "Epic" },
+  1: {
+    emoji: "🥥",
+    description: "Tropical coconut trees with steady yields and excellent drought resistance.",
+    rarity: "Common",
+  },
+  2: {
+    emoji: "🍈",
+    description: "Fast-growing guava with quick yields and multiple harvests per year.",
+    rarity: "Common",
+  },
+  3: {
+    emoji: "🌺",
+    description: "Exotic rambutan trees with premium tropical fruits and consistent returns.",
+    rarity: "Epic",
+  },
+  4: {
+    emoji: "🍈",
+    description: "Large jackfruit trees with substantial yields and long-term growth potential.",
+    rarity: "Epic",
+  },
 };
-
 
 const contractABI = [
   {
     inputs: [{ internalType: "address", name: "_owner", type: "address" }],
     name: "getTreeDetailsByOwner",
     outputs: [
-      { internalType: "uint256[]", name: "tokenIds", type: "uint256[]" },
-      { internalType: "string[]", name: "treeNames", type: "string[]" },
-      { internalType: "uint256[]", name: "currentValues", type: "uint256[]" },
-      { internalType: "uint256[]", name: "availableHarvestsArray", type: "uint256[]" },
-      { internalType: "uint256[]", name: "totalHarvestsArray", type: "uint256[]" },
-      { internalType: "uint256[]", name: "nextHarvestTimes", type: "uint256[]" },
+      { name: "tokenIds", type: "uint256[]" },
+      { name: "treeNames", type: "string[]" },
+      { name: "currentValues", type: "uint256[]" },
+      { name: "mintTimes", type: "uint256[]" },
     ],
     stateMutability: "view",
     type: "function",
   },
 ];
-
 interface TreeData {
   tokenId: number;
   name: string;
   value: number;
-  availableHarvests: number;
-  totalHarvests: number;
-  nextHarvestTime: number;
   emoji: string;
   rarity: string;
   description: string;
@@ -50,7 +60,6 @@ interface SellModalProps {
   availableQuantity: number;
   onConfirmSell: (tokenId: number, quantity: number) => void;
 }
-
 
 const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: SellModalProps) => {
   const [isConfirming, setIsConfirming] = useState(false);
@@ -77,17 +86,23 @@ const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: 
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "Epic": return "from-indigo-600/10 to-purple-600/10";
-      case "Rare": return "from-amber-600/10 to-orange-600/10";
-      default: return "from-emerald-600/10 to-green-600/10";
+      case "Epic":
+        return "from-indigo-600/10 to-purple-600/10";
+      case "Rare":
+        return "from-amber-600/10 to-orange-600/10";
+      default:
+        return "from-emerald-600/10 to-green-600/10";
     }
   };
 
   const getRarityBadgeColor = (rarity: string) => {
     switch (rarity) {
-      case "Epic": return "bg-indigo-50 text-indigo-700 border-indigo-200";
-      case "Rare": return "bg-amber-50 text-amber-700 border-amber-200";
-      default: return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "Epic":
+        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+      case "Rare":
+        return "bg-amber-50 text-amber-700 border-amber-200";
+      default:
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
     }
   };
 
@@ -101,14 +116,18 @@ const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: 
         <div className="p-8 overflow-y-auto flex-1">
           {/* Tree Info */}
           <div className="space-y-4 mb-6">
-            <div className={`bg-slate-50/80 rounded-2xl p-4 border ${getRarityBadgeColor(tree.rarity)} ${getRarityColor(tree.rarity)}`}>
+            <div
+              className={`bg-slate-50/80 rounded-2xl p-4 border ${getRarityBadgeColor(tree.rarity)} ${getRarityColor(tree.rarity)}`}
+            >
               <h3 className="font-semibold text-slate-800 mb-1">{tree.name}</h3>
               <p className="text-sm text-slate-600">{tree.description}</p>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-3">
-              <div className={`bg-gradient-to-br ${getRarityColor(tree.rarity)} rounded-xl p-4 border border-slate-200/40`}>
+              <div
+                className={`bg-gradient-to-br ${getRarityColor(tree.rarity)} rounded-xl p-4 border border-slate-200/40`}
+              >
                 <div className="text-lg font-bold text-slate-800">{tree.value} ETH</div>
                 <div className="text-xs text-slate-600">Current Value</div>
               </div>
@@ -168,7 +187,9 @@ const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: 
             </div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-amber-700">Platform Fee (2.5%)</span>
-              <span className="text-sm font-semibold text-amber-800">-{(tree.value * quantity * 0.025).toFixed(4)} ETH</span>
+              <span className="text-sm font-semibold text-amber-800">
+                -{(tree.value * quantity * 0.025).toFixed(4)} ETH
+              </span>
             </div>
             <hr className="border-amber-200 my-2" />
             <div className="flex items-center justify-between">
@@ -203,7 +224,7 @@ const SellModal = ({ isOpen, onClose, tree, availableQuantity, onConfirmSell }: 
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
@@ -218,7 +239,7 @@ const ProfilePage = () => {
     contractName: "FruitTreeNFT",
   });
   const CONTRACT_ADDRESS = deployedContractData?.address;
-
+  console.log(CONTRACT_ADDRESS);
   const { data: ownedTrees } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: contractABI,
@@ -228,9 +249,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (ownedTrees) {
-      const [tokenIds, treeNames, currentValues, availableHarvestsArray, totalHarvestsArray, nextHarvestTimes] = ownedTrees as [
-        bigint[], string[], bigint[], bigint[], bigint[], bigint[]
-      ];
+      const [tokenIds, treeNames, currentValues, mintTimes] = ownedTrees as [bigint[], string[], bigint[], bigint[]];
 
       const processedTrees: TreeData[] = tokenIds.map((tokenId, index) => {
         const treeName = treeNames[index];
@@ -264,13 +283,10 @@ const ProfilePage = () => {
         return {
           tokenId: Number(tokenId),
           name: treeName,
-          value: Number(currentValues[index]) / 1e18, // Convert from wei
-          availableHarvests: Number(availableHarvestsArray[index]),
-          totalHarvests: Number(totalHarvestsArray[index]),
-          nextHarvestTime: Number(nextHarvestTimes[index]),
+          value: Number(currentValues[index]) / 1e18,
           emoji,
           rarity,
-          description
+          description,
         };
       });
 
@@ -298,40 +314,52 @@ const ProfilePage = () => {
   };
 
   // Group trees by name for display
-  const groupedTrees = treeData.reduce((acc: Record<string, { trees: TreeData[]; emoji: string; rarity: string }>, tree) => {
-    if (acc[tree.name]) {
-      acc[tree.name].trees.push(tree);
-    } else {
-      acc[tree.name] = {
-        trees: [tree],
-        emoji: tree.emoji,
-        rarity: tree.rarity
-      };
-    }
-    return acc;
-  }, {});
+  const groupedTrees = treeData.reduce(
+    (acc: Record<string, { trees: TreeData[]; emoji: string; rarity: string }>, tree) => {
+      if (acc[tree.name]) {
+        acc[tree.name].trees.push(tree);
+      } else {
+        acc[tree.name] = {
+          trees: [tree],
+          emoji: tree.emoji,
+          rarity: tree.rarity,
+        };
+      }
+      return acc;
+    },
+    {},
+  );
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case "Epic": return "from-indigo-600/10 to-purple-600/10";
-      case "Rare": return "from-amber-600/10 to-orange-600/10";
-      default: return "from-emerald-600/10 to-green-600/10";
+      case "Epic":
+        return "from-indigo-600/10 to-purple-600/10";
+      case "Rare":
+        return "from-amber-600/10 to-orange-600/10";
+      default:
+        return "from-emerald-600/10 to-green-600/10";
     }
   };
 
   const getRarityBorder = (rarity: string) => {
     switch (rarity) {
-      case "Epic": return "border-indigo-200";
-      case "Rare": return "border-amber-200";
-      default: return "border-emerald-200";
+      case "Epic":
+        return "border-indigo-200";
+      case "Rare":
+        return "border-amber-200";
+      default:
+        return "border-emerald-200";
     }
   };
 
   const getRarityBadgeColor = (rarity: string) => {
     switch (rarity) {
-      case "Epic": return "bg-indigo-50 text-indigo-700 border-indigo-200";
-      case "Rare": return "bg-amber-50 text-amber-700 border-amber-200";
-      default: return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "Epic":
+        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+      case "Rare":
+        return "bg-amber-50 text-amber-700 border-amber-200";
+      default:
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
     }
   };
 
@@ -341,8 +369,14 @@ const ProfilePage = () => {
         {/* Subtle Background Patterns */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
           <div className="absolute top-20 left-10 w-32 h-32 bg-emerald-100/50 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/3 right-20 w-40 h-40 bg-green-100/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-32 left-1/4 w-24 h-24 bg-teal-100/50 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute top-1/3 right-20 w-40 h-40 bg-green-100/40 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute bottom-32 left-1/4 w-24 h-24 bg-teal-100/50 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "4s" }}
+          ></div>
         </div>
 
         <div className="relative z-10 p-6 lg:p-8 max-w-7xl mx-auto py-12 my-20">
@@ -366,12 +400,16 @@ const ProfilePage = () => {
                   {isConnected ? (
                     <div className="space-y-6">
                       <div className="transform transition-all duration-300">
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Cultivator</p>
+                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">
+                          Cultivator
+                        </p>
                         <p className="text-xl font-medium text-slate-800">Guest Farmer</p>
                       </div>
 
                       <div className="transform transition-all duration-300">
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Wallet Address</p>
+                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">
+                          Wallet Address
+                        </p>
                         <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 shadow-inner transition-all duration-300">
                           <Address address={connectedAddress} />
                         </div>
@@ -380,11 +418,17 @@ const ProfilePage = () => {
                       <div className="bg-gradient-to-br from-emerald-50/80 to-green-50/80 rounded-2xl p-6 border border-emerald-200/60 transition-all duration-300 hover:shadow-md group/stat">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">Collection Size</p>
-                            <p className="text-3xl font-bold text-emerald-800 transition-all duration-300">{treeData.length}</p>
+                            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">
+                              Collection Size
+                            </p>
+                            <p className="text-3xl font-bold text-emerald-800 transition-all duration-300">
+                              {treeData.length}
+                            </p>
                             <p className="text-sm text-emerald-600/80">Tree NFT{treeData.length !== 1 && "s"}</p>
                           </div>
-                          <div className="text-3xl opacity-20 transition-all duration-300 group-hover/stat:opacity-40 group-hover/stat:scale-110">🌳</div>
+                          <div className="text-3xl opacity-20 transition-all duration-300 group-hover/stat:opacity-40 group-hover/stat:scale-110">
+                            🌳
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -438,13 +482,19 @@ const ProfilePage = () => {
                           className="group/card relative animate-fade-in-up"
                           style={{ animationDelay: `${index * 100}ms` }}
                         >
-                          <div className={`absolute -inset-px bg-gradient-to-r ${getRarityColor(rarity)} rounded-2xl blur-sm opacity-0 group-hover/card:opacity-100 transition-all duration-500`}></div>
-                          <div className={`relative bg-white/95 backdrop-blur-sm rounded-2xl p-6 border ${getRarityBorder(rarity)} shadow-sm transition-all duration-300 group-hover/card:shadow-md group-hover/card:-translate-y-1`}>
+                          <div
+                            className={`absolute -inset-px bg-gradient-to-r ${getRarityColor(rarity)} rounded-2xl blur-sm opacity-0 group-hover/card:opacity-100 transition-all duration-500`}
+                          ></div>
+                          <div
+                            className={`relative bg-white/95 backdrop-blur-sm rounded-2xl p-6 border ${getRarityBorder(rarity)} shadow-sm transition-all duration-300 group-hover/card:shadow-md group-hover/card:-translate-y-1`}
+                          >
                             <div className="text-center">
                               <div className="text-4xl mb-4 transform transition-all duration-300 group-hover/card:scale-110 group-hover/card:rotate-12">
                                 {emoji}
                               </div>
-                              <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border mb-4 ${getRarityBadgeColor(rarity)} transition-all duration-300 group-hover/card:shadow-sm`}>
+                              <div
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border mb-4 ${getRarityBadgeColor(rarity)} transition-all duration-300 group-hover/card:shadow-sm`}
+                              >
                                 {rarity}
                               </div>
                               <h3 className="font-semibold text-slate-800 mb-3 text-base leading-snug transition-colors duration-300 group-hover/card:text-emerald-700">
@@ -501,24 +551,32 @@ const ProfilePage = () => {
             isOpen={isSellModalOpen}
             onClose={() => setSellModalOpen(false)}
             tree={selectedTree}
-            availableQuantity={
-              selectedTree
-                ? treeData.filter(t => t.name === selectedTree.name).length
-                : 0
-            }
+            availableQuantity={selectedTree ? treeData.filter(t => t.name === selectedTree.name).length : 0}
             onConfirmSell={handleConfirmSell}
           />
         </div>
 
-          <style jsx>{`
+        <style jsx>{`
           @keyframes fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
 
           @keyframes fade-in-up {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
 
           .animate-fade-in {
